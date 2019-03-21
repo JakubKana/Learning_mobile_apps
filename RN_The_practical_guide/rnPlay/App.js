@@ -1,5 +1,5 @@
 /**
- * Sample React Native App
+ * The React Native The Practical Guide App
  * https://github.com/facebook/react-native
  *
  * @format
@@ -8,7 +8,14 @@
  */
 
 import React, { Component } from "react";
-import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Button
+} from "react-native";
 import replacePathSepForGlob from "jest-util/build/replacePathSepForGlob";
 import { black } from "ansi-colors";
 
@@ -20,29 +27,32 @@ const instructions = Platform.select({
 });
 
 type Props = {};
+
 export default class App extends Component<Props> {
   state = {
-    placeName: '',
-  }
+    placeName: ""
+  };
 
   placeNameChangedHandler = val => {
-    
     this.setState({
       placeName: val
     });
-  }
+  };
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>Awesome</Text>
-        <TextInput 
-        maxLength={40} 
-        editable 
-        style={{width:200, borderColor:"black", borderWidth:1}}
-        onChangeText={this.placeNameChangedHandler}
-        value={this.state.placeName}
-        />
+        <View style={style.inputContainer}>
+          <Text>Awesome</Text>
+          <TextInput
+            maxLength={40}
+            placeholder="An awesome place"
+            style={{ width: 200, borderColor: "black", borderWidth: 1 }}
+            onChangeText={this.placeNameChangedHandler}
+            value={this.state.placeName}
+          />
+          <Button title="Add" />
+        </View>
       </View>
     );
   }
@@ -52,10 +62,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 26,
-    backgroundColor:"#fff",
+    backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "flex-start",
-    
-
+    justifyContent: "flex-start"
+  },
+  inputContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between"
   }
 });
