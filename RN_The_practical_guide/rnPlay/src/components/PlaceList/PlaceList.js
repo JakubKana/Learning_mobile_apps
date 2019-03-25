@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView, FlatList } from "react-native";
 import ListItem from "../ListItem/ListItem";
 
 type Props = {
@@ -12,10 +12,12 @@ export default class PlaceList extends PureComponent<Props> {
       <ListItem
         key={i}
         placeName={place}
-        onItemPress={() => alert("Item pressed ID: " + i)}
+        onItemPress={() => this.props.onItemDeleted(i)}
+        // onItemPress={() => alert("Item pressed ID: " + i)}
       />
     ));
-    return <View style={styles.listContainer}>{placesOutput}</View>;
+    // Can have performance issues on slower devices use FlatList
+    return <ScrollView style={styles.listContainer}>{placesOutput}</ScrollView>;
   }
 }
 

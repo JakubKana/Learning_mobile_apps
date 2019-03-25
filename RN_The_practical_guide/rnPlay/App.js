@@ -34,11 +34,22 @@ export default class App extends Component<Props> {
 
   
   placeAddedHandler = placeName => {
-      this.setState(prevState=> {
+      // Set state runs asynchronously
+      this.setState(prevState => {
       return {
         places: prevState.places.concat(placeName),
       }
     })
+  }
+
+  placeDeletedHandler = index => {
+    this.setState(prevState => {
+      return {
+        places: prevState.places.filter((place, i) => {
+          return i !== index;
+        })
+      };
+    });
   }
 
 
@@ -49,7 +60,9 @@ export default class App extends Component<Props> {
           <TextInputForm
               onPlaceAdded={this.placeAddedHandler}
           />
-        <PlaceList places={this.state.places}/>
+        <PlaceList places={this.state.places}
+          onItemDeleted={this.placeDeletedHandler}
+        />
       </View>
     );
   }
