@@ -12,7 +12,8 @@ const placeList = props => {
         renderItem={({ item }) => (
          <ListItem
            // key={info.item.key.toString()}
-            placeName={item.val}
+           placeImage={Math.random() >= 0.5 ? item.image : item.imageLocal} 
+           placeName={item.name}
             onItemPress={() => props.onItemDeleted(item.key)}
           />
         )}

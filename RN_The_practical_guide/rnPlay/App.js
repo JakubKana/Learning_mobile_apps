@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Platform, StyleSheet, View, FlatList, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import PlaceList from "./src/components/PlaceList/PlaceList";
 import TextInputForm from "./src/components/TextInputForm/TextInputForm";
+import placeImage from "./src/assets/beautiful-place.jpg";
 
 type Props = {};
 
@@ -15,7 +16,14 @@ export default class App extends Component<Props> {
      // Set state runs asynchronously
     this.setState(prevProps => {
       return {
-        places: prevProps.places.concat({key: Math.random(), val: placeName}),
+        places: prevProps.places.concat({
+          key: Math.random(), 
+          name: placeName,
+          imageLocal: placeImage,
+          image: {
+            uri: "https://images2.alphacoders.com/141/thumb-1920-141340.jpg"
+          }
+        }),
       };
     });
   };
@@ -38,7 +46,6 @@ export default class App extends Component<Props> {
           places={this.state.places}
           onItemDeleted={this.placeDeletedHandler}
         />
-       
       </View>
     );
   }
