@@ -1,28 +1,29 @@
-import React, { PureComponent } from "react";
-import { View, StyleSheet, ScrollView, FlatList } from "react-native";
+import React from "react";
+import { StyleSheet, FlatList } from "react-native";
 import ListItem from "../ListItem/ListItem";
 
-type Props = {
-  places: []
-};
-
-export default class PlaceList extends PureComponent<Props> {
-  render() {
-    const placesOutput = this.props.places.map((place, i) => (
-      <ListItem
-        key={i}
-        placeName={place}
-        onItemPress={() => this.props.onItemDeleted(i)}
-        // onItemPress={() => alert("Item pressed ID: " + i)}
-      />
-    ));
+const placeList = props => {
     // Can have performance issues on slower devices use FlatList
-    return <ScrollView style={styles.listContainer}>{placesOutput}</ScrollView>;
-  }
+    return (
+      <FlatList
+        style={styles.listContainer}
+        data={props.places}
+        keyExtractor={(item) => item.key.toString()}
+        renderItem={({ item }) => (
+         <ListItem
+           // key={info.item.key.toString()}
+            placeName={item.val}
+            onItemPress={() => props.onItemDeleted(item.key)}
+          />
+        )}
+      />
+    );
 }
 
 const styles = StyleSheet.create({
   listContainer: {
-    width: "100%"
+    width: "100%",
   }
 });
+
+export default placeList;
