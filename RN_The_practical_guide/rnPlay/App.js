@@ -4,12 +4,14 @@ import { StyleSheet, View } from "react-native";
 import PlaceList from "./src/components/PlaceList/PlaceList";
 import TextInputForm from "./src/components/TextInputForm/TextInputForm";
 import placeImage from "./src/assets/beautiful-place.jpg";
+import PlaceDetail from "./src/components/PlaceDetail/PlaceDetail";
 
 type Props = {};
 
 export default class App extends Component<Props> {
   state = {
-    places: []
+    places: [],
+    selectedPlace: null,
   };
 
   placeAddedHandler = placeName => {
@@ -38,13 +40,24 @@ export default class App extends Component<Props> {
     });
   };
 
+  placeSelectedHandler = key => {
+    this.setState(prevState => {
+      return {
+        selectedPlace: prevState.places.find(place => {
+          return place.key === key;
+        })
+      };
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <PlaceDetail selectedPlace={this.state.selectedPlace}/>
         <TextInputForm onPlaceAdded={this.placeAddedHandler} />
         <PlaceList
           places={this.state.places}
-          onItemDeleted={this.placeDeletedHandler}
+          onItemSelected={this.placeSelectedHandler}
         />
       </View>
     );
