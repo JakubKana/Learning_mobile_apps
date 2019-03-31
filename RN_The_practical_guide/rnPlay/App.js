@@ -6,9 +6,9 @@ import TextInputForm from "./src/components/TextInputForm/TextInputForm";
 import placeImage from "./src/assets/beautiful-place.jpg";
 import PlaceDetail from "./src/components/PlaceDetail/PlaceDetail";
 
-type Props = {};
 
-export default class App extends Component<Props> {
+
+export default class App extends Component {
   state = {
     places: [],
     selectedPlace: null,
@@ -30,15 +30,32 @@ export default class App extends Component<Props> {
     });
   };
 
-  placeDeletedHandler = key => {
+  placeDeletedHandler = () => {
     this.setState(prevState => {
       return {
         places: prevState.places.filter(place => {
-          return place.key !== key;
-        })
-      };
+          return place.key !== prevState.selectedPlace.key;
+        }),
+        selectedPlace: null,
+      }
     });
   };
+
+  // placeDeletedHandler = key => {
+  //   this.setState(prevState => {
+  //     return {
+  //       places: prevState.places.filter(place => {
+  //         return place.key !== key;
+  //       })
+  //     };
+  //   });
+  // };
+
+    modalClosedHandler = () => {
+      this.setState({
+        selectedPlace: null
+      });
+    }
 
   placeSelectedHandler = key => {
     this.setState(prevState => {
@@ -53,7 +70,9 @@ export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <PlaceDetail selectedPlace={this.state.selectedPlace}/>
+        <PlaceDetail selectedPlace={this.state.selectedPlace}
+        onItemDeleted={this.placeDeletedHandler}
+        onModalClosed={this.modalClosedHandler}/>
         <TextInputForm onPlaceAdded={this.placeAddedHandler} />
         <PlaceList
           places={this.state.places}
