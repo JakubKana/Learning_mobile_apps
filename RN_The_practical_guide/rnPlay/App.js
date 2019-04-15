@@ -11,6 +11,7 @@ Navigation.registerComponent("rnplay.FindPlaceScreen", () => FindPlaceScreen);
 
 // Start a App
 Navigation.events().registerAppLaunchedListener(() => {
+  
   Navigation.setRoot({
     root: {
       stack: {
