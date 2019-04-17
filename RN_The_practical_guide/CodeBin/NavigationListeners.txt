@@ -1,0 +1,14 @@
+//Navigation command listeners
+
+// const commandListener = Navigation.events().registerCommandListener(
+//     (name, params) => {
+//          console.warn("Command start", name, params);
+//     },
+// );
+
+// const commandCompletedListener = Navigation.events().registerCommandCompletedListener(
+//     ({ commandId, completionTime, params }) => {
+//         console.log("Command end", commandId, completionTime);
+//         NavigationTimer.setNavigation(true);
+//     },
+// );
