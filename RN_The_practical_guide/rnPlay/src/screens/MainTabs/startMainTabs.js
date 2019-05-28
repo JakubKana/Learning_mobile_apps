@@ -1,7 +1,15 @@
 import { Navigation } from "react-native-navigation";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
-import icon from "../../assets/beautiful-place.jpg";
 const startTabs = () => {
+  Promise.all([
+    Icon.getImageSource('place-of-worship', 32, 'black'),
+    Icon.getImageSource('gopuram',32, 'black')
+]).then(([
+    SharedPlaceIcon,
+    FindPlaceIcon]) => {
+0
+  
   Navigation.setRoot({
     root: {
       bottomTabs: {
@@ -23,9 +31,10 @@ const startTabs = () => {
                       },
                       bottomTab: {
                         text: "Share Place",
-                        icon: icon,
+                        icon: SharedPlaceIcon,
                         textColor: "#1B4C77",
-                        selectedTextColor: "#0f0",
+                        selectedTextColor: "#444",
+                        selectedIconColor: "#555",
                         fontSize: 14,
                         selectedFontSize: 16
                       }
@@ -56,9 +65,10 @@ const startTabs = () => {
                       },
                       bottomTab: {
                         text: "Find Place",
-                        icon: icon,
+                        icon: FindPlaceIcon,
                         textColor: "#1B4C77",
-                        selectedTextColor: "#0f0",
+                        selectedTextColor: "#444",
+                        selectedIconColor: "#555",
                         fontSize: 14,
                         selectedFontSize: 16
                       }
@@ -83,6 +93,8 @@ const startTabs = () => {
       }
     }
   });
+  });
 };
+
 
 export default startTabs;
