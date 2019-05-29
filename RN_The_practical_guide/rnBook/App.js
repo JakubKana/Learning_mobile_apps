@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, TextInput, Button, FlatList } from "react-native";
 import ListItem from "./components/ListItem";
+import { HTMLView } from "./components/HTMLVIew";
 import { connect } from "react-redux";
 import { addPlace, addPlaceWithLog } from "./actions/places";
 
@@ -38,7 +39,7 @@ class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.inputContainer}>
+        {/* <View style={styles.inputContainer}>
           <TextInput
             placeholder="Seach Places"
             style={styles.placeInput}
@@ -51,7 +52,8 @@ class App extends Component {
             onPress={this.placeSubmitHandler}
           />
         </View>
-        <View style={styles.listContainer}>{this.placesOutput()}</View>
+        <View style={styles.listContainer}>{this.placesOutput()}</View> */}
+        <HTMLView />
       </View>
     );
   }
