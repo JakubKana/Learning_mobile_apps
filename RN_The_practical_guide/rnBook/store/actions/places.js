@@ -1,4 +1,5 @@
 import { ADD_PLACE } from "./types";
+import { Dispatch } from "react";
 
 export const addPlace = placeName => {
   return {
