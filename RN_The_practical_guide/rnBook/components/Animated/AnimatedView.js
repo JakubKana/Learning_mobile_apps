@@ -10,35 +10,69 @@ import { Animated, Easing, StyleSheet, Text, View } from "react-native";
     interpolate - We will cover this method later in this chapter
 */
 
+/**
+ * Animated.parallel - Executes animations in parallel
+ * Animated.delay - Delays execution of animation
+ * Animated.sequence - Executes animations in sequence
+ * Animated.stagger - Executes in sequence with delay
+ * Animated.decay - Animates a value from an initial velocity to zero based on deceleration
+ * Animated.spring - S
+ */
+
 class AnimatedView extends Component {
   state = {
     items: 5,
-    fadeAnim: new Animated.Value(0),
-    slideAnim: new Animated.Value(-100),
-    scaleAnim: new Animated.Value(0),
-    animatedValue: new Animated.Value(0)
+    // fadeAnim: new Animated.Value(0),
+    // slideAnim: new Animated.Value(-100),
+    // scaleAnim: new Animated.Value(0),
+    animatedValue: new Animated.Value(0),
+    animatedColor: new Animated.Value(0)
   };
 
   componentDidMount() {
-    const { timing } = Animated;
-    const { fadeAnim, slideAnim, scaleAnim } = this.state;
+    const { timing, parallel, sequence, delay, stagger } = Animated;
+    const { animatedColor, animatedValue } = this.state;
     // const slideAnim = this.state.animatedValue.interpolate({
     //   inputRange: [0, 1],
     //   outputRange: [-100, 0]
     // });
 
-    timing(fadeAnim, {
-      duration: 3000,
-      delay: 400,
-      easing: Easing.bounce,
-      toValue: 1
-    }).start();
-    timing(slideAnim, { toValue: 0 }).start();
-    timing(scaleAnim, { toValue: 1 }).start();
-    // timing(this.state.animatedValue, { toValue: 1 }).start();
+    // timing(fadeAnim, {
+    //   duration: 3000,
+    //   delay: 400,
+    //   easing: Easing.bounce,
+    //   toValue: 1
+    // }).start();
+    // timing(slideAnim, { toValue: 0 }).start();
+    // timing(scaleAnim, { toValue: 1 }).start();
+
+    // timing(animatedValue, { toValue: 1 }).start();
+
+    sequence([
+      delay(200),
+      timing(animatedValue, { toValue: 1 }),
+      delay(200),
+      timing(animatedValue, { toValue: 2 }),
+      parallel([
+        timing(animatedColor, { toValue: 100 }),
+        stagger(600, [
+          timing(animatedValue, { toValue: 1 }),
+          timing(animatedValue, { toValue: 0 }),
+          timing(animatedValue, { toValue: 1 })
+        ])
+      ])
+    ]).start();
   }
 
   items() {
+    const slideAnim = this.state.animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [-100, 0]
+    });
+    const color = this.state.animatedColor.interpolate({
+      inputRange: [0, 50, 100],
+      outputRange: ["gray", "black", "gray"]
+    });
     return Array(this.state.items)
       .fill(1)
       .map((item, index) => {
@@ -50,7 +84,8 @@ class AnimatedView extends Component {
                 style={[
                   styles.item,
                   {
-                    transform: [{ scale: this.state.scaleAnim }]
+                    transform: [{ scale: this.state.animatedValue }],
+                    backgroundColor: color
                   }
                 ]}
                 key={index}
@@ -67,7 +102,7 @@ class AnimatedView extends Component {
                   {
                     transform: [
                       {
-                        translateY: this.state.slideAnim
+                        translateY: slideAnim
                       }
                     ]
                   }
@@ -84,7 +119,7 @@ class AnimatedView extends Component {
                 style={[
                   styles.item,
                   {
-                    transform: [{ translateX: this.state.slideAnim }]
+                    transform: [{ translateX: slideAnim }]
                   }
                 ]}
                 key={index}
@@ -102,10 +137,10 @@ class AnimatedView extends Component {
                   {
                     transform: [
                       {
-                        translateX: this.state.slideAnim
+                        translateX: slideAnim
                       },
                       {
-                        translateY: this.state.slideAnim
+                        translateY: slideAnim
                       }
                     ]
                   }
@@ -123,7 +158,7 @@ class AnimatedView extends Component {
                 style={[
                   styles.item,
                   {
-                    opacity: this.state.fadeAnim
+                    opacity: this.state.animatedValue
                   }
                 ]}
                 key={index}
@@ -136,7 +171,7 @@ class AnimatedView extends Component {
   }
 
   render() {
-    return this.items();
+    return <View style={styles.area}>{this.items()}</View>;
   }
 }
 
