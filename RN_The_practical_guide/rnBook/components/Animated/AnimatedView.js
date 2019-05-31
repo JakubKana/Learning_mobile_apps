@@ -16,7 +16,7 @@ import { Animated, Easing, StyleSheet, Text, View } from "react-native";
  * Animated.sequence - Executes animations in sequence
  * Animated.stagger - Executes in sequence with delay
  * Animated.decay - Animates a value from an initial velocity to zero based on deceleration
- * Animated.spring - S
+ * Animated.spring - Spring animation based on  http://origami.design/  and http://facebook.github.io/rebound/
  */
 
 class AnimatedView extends Component {
