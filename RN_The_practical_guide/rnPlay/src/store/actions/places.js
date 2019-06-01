@@ -12,15 +12,3 @@ export const deletePlace = () => {
     };
 };
 
-export const selectPlace = key => {
-    return {
-        type: ACTIONS.SELECT_PLACE,
-        placeKey: key
-    };
-};
-
-export const deselectPlace = () => {
-    return {
-        type: ACTIONS.DESELECT_PLACE
-    };
-};
