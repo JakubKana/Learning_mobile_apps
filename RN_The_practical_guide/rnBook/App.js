@@ -1,15 +1,30 @@
-import React, { Component } from "react";
-import { StyleSheet, View, TextInput, Button, FlatList } from "react-native";
-import ListItem from "./components/ListItem";
-import { HTMLView } from "./components/HTMLVIew";
+import React from "react";
+import { Component } from "react";
+
 import { connect } from "react-redux";
-import { addPlace, addPlaceWithLog } from "./actions/places";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Button,
+  FlatList,
+  ActivityIndicator
+} from "react-native";
+import ListItem from "./components/ListItem";
+import AnimatedView from "./components/Animated/AnimatedView";
+
+import { addPlace, addPlaceWithLog } from "./store/actions/places";
 
 class App extends Component {
   state = {
     placeName: "",
-    places: []
+    places: [],
+    isLoading: false
   };
+
+  constructor(props) {
+    super(props);
+  }
 
   placeSubmitHandler = () => {
     if (this.state.placeName.trim() === "") {
@@ -39,7 +54,12 @@ class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <View style={styles.inputContainer}>
+        <View>
+          <AnimatedView />
+        </View>
+        {/* 
+        <ActivityIndicator animating={this.state.isLoading} size="large" />
+        <View style={styles.inputContainer}>
           <TextInput
             placeholder="Seach Places"
             style={styles.placeInput}
@@ -53,7 +73,6 @@ class App extends Component {
           />
         </View>
         <View style={styles.listContainer}>{this.placesOutput()}</View> */}
-        <HTMLView />
       </View>
     );
   }
@@ -61,8 +80,9 @@ class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 30,
-    justifyContent: "flex-start",
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center"
   },
   inputContainer: {

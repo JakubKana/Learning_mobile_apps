@@ -8,8 +8,6 @@ const startTabs = () => {
 ]).then(([
     SharedPlaceIcon,
     FindPlaceIcon]) => {
-0
-  
   Navigation.setRoot({
     root: {
       bottomTabs: {
