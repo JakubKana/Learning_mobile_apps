@@ -3,7 +3,7 @@ import { TextInput, Button, View, StyleSheet } from "react-native";
 
 type Props = {};
 
-class TextInputForm extends PureComponent<Props> {
+class PlaceInput extends PureComponent<Props> {
   state = {
     placeName: "",
   };
@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default TextInputForm;
+export default PlaceInput;
