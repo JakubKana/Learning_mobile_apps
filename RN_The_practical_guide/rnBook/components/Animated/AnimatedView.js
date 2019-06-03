@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import { Animated, Easing, StyleSheet, Text, View } from "react-native";
+import { Animated, Easing, StyleSheet, Text, View, Button } from "react-native";
 
 /* setValue - Directly set values on ANimated.Value
     addListner: Due to the asynchronous nature of animations, if you want to know what the Animated value is,
@@ -32,36 +32,37 @@ class AnimatedView extends Component {
   componentDidMount() {
     const { timing, parallel, sequence, delay, stagger } = Animated;
     const { animatedColor, animatedValue } = this.state;
-    // const slideAnim = this.state.animatedValue.interpolate({
-    //   inputRange: [0, 1],
-    //   outputRange: [-100, 0]
-    // });
+    const slideAnim = this.state.animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [-100, 0]
+    });
 
+    this.state.animatedValue.addListener(({ value }) => (this._value = value));
     // timing(fadeAnim, {
     //   duration: 3000,
     //   delay: 400,
     //   easing: Easing.bounce,
     //   toValue: 1
     // }).start();
-    // timing(slideAnim, { toValue: 0 }).start();
+    //  timing(slideAnim, { toValue: 0 }).start();
     // timing(scaleAnim, { toValue: 1 }).start();
 
-    // timing(animatedValue, { toValue: 1 }).start();
+    timing(animatedValue, { toValue: 1 }).start();
 
-    sequence([
-      delay(200),
-      timing(animatedValue, { toValue: 1 }),
-      delay(200),
-      timing(animatedValue, { toValue: 2 }),
-      parallel([
-        timing(animatedColor, { toValue: 100 }),
-        stagger(600, [
-          timing(animatedValue, { toValue: 1 }),
-          timing(animatedValue, { toValue: 0 }),
-          timing(animatedValue, { toValue: 1 })
-        ])
-      ])
-    ]).start();
+    // sequence([
+    //   delay(200),
+    //   timing(animatedValue, { toValue: 1 }),
+    //   delay(200),
+    //   timing(animatedValue, { toValue: 2 }),
+    //   parallel([
+    //     timing(animatedColor, { toValue: 100 }),
+    //     stagger(600, [
+    //       timing(animatedValue, { toValue: 1 }),
+    //       timing(animatedValue, { toValue: 0 }),
+    //       timing(animatedValue, { toValue: 1 })
+    //     ])
+    //   ])
+    // ]).start();
   }
 
   items() {
@@ -170,15 +171,67 @@ class AnimatedView extends Component {
       });
   }
 
+  toggle = () => {
+    console.log(this.state.animatedValue._value);
+    if (this.state.animatedValue._value < 0.2) {
+      Animated.timing(this.state.animatedValue, {
+        toValue: 1,
+        duration: 1500,
+        easing: Easing.exp
+      }).start();
+    }
+
+    if (this.state.animatedValue._value >= 0.2) {
+      Animated.timing(this.state.animatedValue, {
+        toValue: 0.2,
+        duration: 1500,
+        easing: Easing.exp
+      }).start();
+    }
+  };
+
   render() {
-    return <View style={styles.area}>{this.items()}</View>;
+    const animatedHeight = this.state.animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [40, 100]
+    });
+    const animatedRotation = this.state.animatedValue.interpolate({
+      inputRange: [0, 0.5],
+      outputRange: ["0deg", "180deg"],
+      extrapolate: "clamp"
+    });
+    return (
+      <View style={styles.area}>
+        <Animated.View
+          style={[
+            styles.item,
+            {
+              height: animatedHeight
+            }
+          ]}
+          onPress={this.toggle}
+        />
+        <View style={{ height: 5 }} />
+        <Animated.View
+          style={[
+            styles.item,
+            {
+              height: animatedHeight
+            }
+          ]}
+          onPress={this.toggle}
+        />
+        <View style={{ height: 5 }} />
+        <Button onPress={this.toggle} title="Press me" />
+      </View>
+    );
   }
 }
 
 const styles = StyleSheet.create({
   area: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center"
   },
@@ -187,11 +240,9 @@ const styles = StyleSheet.create({
     color: "white"
   },
   item: {
-    width: 50,
+    width: 100,
     height: 50,
     backgroundColor: "gray",
-    borderRadius: 25,
-    margin: 10,
     justifyContent: "center",
     alignItems: "center"
   }

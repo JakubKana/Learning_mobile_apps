@@ -13,6 +13,8 @@ import {
 import ListItem from "./components/ListItem";
 import AnimatedView from "./components/Animated/AnimatedView";
 
+import LayoutAnimationView from "./components/LayoutAnimationView/LayoutAnimationView";
+
 import { addPlace, addPlaceWithLog } from "./store/actions/places";
 
 class App extends Component {
@@ -55,7 +57,8 @@ class App extends Component {
     return (
       <View style={styles.container}>
         <View>
-          <AnimatedView />
+          {/* <AnimatedView /> */}
+          <LayoutAnimationView />
         </View>
         {/* 
         <ActivityIndicator animating={this.state.isLoading} size="large" />
