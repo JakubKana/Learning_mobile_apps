@@ -16,7 +16,7 @@ const store = configureStore();
 Navigation.registerComponentWithRedux("rnplay.AuthScreen", () => AuthScreen, Provider, store);
 Navigation.registerComponentWithRedux("rnplay.SharePlaceScreen", () => SharePlaceScreen, Provider, store);
 Navigation.registerComponentWithRedux("rnplay.FindPlaceScreen", () => FindPlaceScreen, Provider, store);
-Navigation.registerComponent("rnplay.PlaceDetailScreen", () => PlaceDetail);
+Navigation.registerComponentWithRedux("rnplay.PlaceDetailScreen", () => PlaceDetail, Provider, store);
 // Start a App
 Navigation.events().registerAppLaunchedListener(() => {
   

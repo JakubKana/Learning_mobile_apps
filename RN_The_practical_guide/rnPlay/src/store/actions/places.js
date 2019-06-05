@@ -6,9 +6,10 @@ export const addPlace = (placeName) => {
     };
 };
 
-export const deletePlace = () => {
+export const deletePlace = (key) => {
     return {
-        type: ACTIONS.DELETE_PLACE
+        type: ACTIONS.DELETE_PLACE,
+        placeKey: key
     };
 };
 
