@@ -1,0 +1,46 @@
+    Navigation.registerComponent("mvzp.TopBar", () => TopBar);
+
+// export function AppBaseStack<TProps extends NavigationCapableProps>(
+//     WrappedComponent: React.ComponentType<TProps>,
+//     title?: string,
+// ): React.ComponentClass<TProps> {
+//     return class extends React.Component<TProps> {
+//         static options(): Options {
+//             return {
+//                 // topBar: {
+//                 //     title: {
+//                 //         component: {
+//                 //             id: "CustomTopBar",
+//                 //             name: "mvzp.TopBar",
+//                 //             passProps: {
+//                 //                 title: title,
+//                 //             },
+//                 //         },
+//                 //     },
+//                 //     backButton: {
+//                 //         visible: false,
+//                 //     },
+//                 // },
+//                 topBar: {
+//                     title: {
+//                         text: title,
+//                     },
+//                 },
+//             };
+//         }
+
+//         constructor(props: TProps) {
+//             super(props);
+//         }
+
+//         render(): JSX.Element {
+//             return (
+//                 <Offline>
+//                     <PhysicalLocation>
+//                         <WrappedComponent {...this.props} />
+//                     </PhysicalLocation>
+//                 </Offline>
+//             );
+//         }
+//     };
+// }

@@ -1,0 +1,19 @@
+ component: {
+            name: getScreenId("ExtrasAbout"),
+            options: {
+                topBar: {
+                    title: {
+                        component: {
+                            name: "mvzp.TopBar",
+                            passProps: {
+                                rendererId: rendererId,
+                                title: "O aplikaci",
+                            },
+                        },
+                    },
+                    backButton: {
+                        visible: false,
+                    },
+                },
+            },
+        },
