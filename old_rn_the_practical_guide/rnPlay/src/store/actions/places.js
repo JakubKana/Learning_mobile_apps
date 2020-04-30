@@ -1,4 +1,5 @@
 import * as ACTIONS from './actionTypes';
+
 export const addPlace = (placeName) => {
     return {
         type: ACTIONS.ADD_PLACE,
