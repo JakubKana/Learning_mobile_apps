@@ -5,6 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "adbreverse": "adb reverse tcp:8081 tcp:8081",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
