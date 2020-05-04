@@ -7,49 +7,68 @@
  */
 
 import React from 'react';
-import {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  Button,
-  Text,
-  ScrollView,
-} from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, View, Button, FlatList } from 'react-native';
+import { GoalItem } from './components/GoalItem';
+import { GoalInput } from './components/GoalInput';
+interface ItemData {
+  item: Item;
+}
+type Item = {
+  uid: string;
+  value: string;
+};
 
 export default function App() {
-  const [enteredGoal, setEnteredGoal] = useState('');
   const [courseGoals, setCourseGoals] = useState([]);
+  const [isAddMode, setIsAddMode] = useState(false);
+  console.log('RE-RENDERING COMPONENT');
+  console.log(courseGoals);
 
-  const goalInputHandler = (enteredText: string) => {
-    setEnteredGoal(enteredText);
+  const addGoalHandler = (enteredGoal: string) => {
+    console.log(`Trying to add goal - ${enteredGoal}`);
+
+    if (enteredGoal.length === 0) {
+      return;
+    }
+    // @ts-ignore
+    setCourseGoals(currentGoals => [
+      ...currentGoals,
+      { uid: Math.random().toString(), value: enteredGoal },
+    ]);
+    setIsAddMode(false);
   };
 
-  const addGoalHandler = () => {
-    console.log(enteredGoal);
-    // @ts-ignore
-    setCourseGoals((currentGoals) => [...currentGoals, enteredGoal]);
+  const removeGoalHandler = (goalId: string) => {
+    console.log(`TO BE DELETED: ${goalId}`);
+    setCourseGoals(currentGoals => {
+      return currentGoals.filter((goal: Item) => goal.uid !== goalId);
+    });
+  };
+
+  const cancelGoal = () => {
+    setIsAddMode(false);
   };
 
   return (
     <View style={styles.screen}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Course goal"
-          style={styles.input}
-          onChangeText={goalInputHandler}
-          value={enteredGoal}
-        />
-
-        <Button title="ADD" onPress={addGoalHandler} />
-      </View>
-      <ScrollView>
-        {courseGoals.map((goal, index) => (
-          <View key={`${goal}-${index}`} style={styles.listItem}>
-            <Text>{goal}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      <Button title="Add new goal" onPress={() => setIsAddMode(true)} />
+      <GoalInput
+        isAddMode={isAddMode}
+        addGoal={addGoalHandler}
+        cancelGoal={cancelGoal}
+      />
+      <FlatList
+        keyExtractor={item => item.uid}
+        data={courseGoals}
+        renderItem={(itemData: ItemData) => (
+          <GoalItem
+            id={itemData.item.uid}
+            title={itemData.item.value}
+            onDelete={removeGoalHandler}
+          />
+        )}
+      />
     </View>
   );
 }
@@ -58,12 +77,6 @@ const styles = StyleSheet.create({
   screen: {
     padding: 10,
   },
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  input: {borderColor: 'black', borderWidth: 1, padding: 10, flex: 3},
   listItem: {
     padding: 10,
     backgroundColor: '#ccc',
