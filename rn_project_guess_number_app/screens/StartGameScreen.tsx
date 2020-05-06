@@ -2,15 +2,22 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   Button,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import { Card } from "../components/Card";
 import { Colors } from "../constants/colors";
 import { Input } from "../components/Input";
-const StartGameScreen = () => {
+import { NumberContainer } from "../components/NumberContainer";
+import { styles } from "./StartGameScreenStyles";
+
+interface StartGameScreenProps {
+  onStartGame: (selectedNumber: number) => void;
+}
+
+const StartGameScreen = (props: StartGameScreenProps) => {
   const [enteredValue, setEnteredValue] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState(0);
@@ -28,17 +35,32 @@ const StartGameScreen = () => {
     const chosenNumber = parseInt(enteredValue, 10);
     console.log("Confirming number %d", chosenNumber);
     if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+      Alert.alert(
+        "Invalid number",
+        "Number has to be a number between 1 and 99.",
+        [{ text: "Okay", style: "destructive", onPress: resetInputHandler }],
+      );
       return;
     }
     setConfirmed(true);
     setEnteredValue("");
     setSelectedNumber(parseInt(enteredValue, 10));
+    Keyboard.dismiss();
   };
 
   let confirmedOutput: JSX.Element | null = null;
 
   if (confirmed) {
-    confirmedOutput = <Text>Chosen Number: {selectedNumber}</Text>;
+    confirmedOutput = (
+      <Card style={styles.summaryContainer}>
+        <Text>You selected</Text>
+        <NumberContainer>{selectedNumber}</NumberContainer>
+        <Button
+          title="START GAME"
+          onPress={() => props.onStartGame(selectedNumber)}
+        />
+      </Card>
+    );
   }
 
   return (
@@ -46,7 +68,7 @@ const StartGameScreen = () => {
       <View style={styles.screen}>
         <Text style={styles.title}>Start a New Game!</Text>
         <Card style={styles.inputContainer}>
-          <Text>Select a Nmber</Text>
+          <Text>Select a Number</Text>
           <Input
             style={styles.input}
             blurOnSubmit
@@ -79,35 +101,5 @@ const StartGameScreen = () => {
     </TouchableWithoutFeedback>
   );
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    padding: 10,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 20,
-    marginVertical: 10,
-  },
-  inputContainer: {
-    width: 300,
-    maxWidth: "80%",
-    alignItems: "center",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    width: "100%",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-  },
-  button: {
-    width: 100,
-  },
-  input: {
-    width: 50,
-    textAlign: "center",
-  },
-});
 
 export { StartGameScreen };
