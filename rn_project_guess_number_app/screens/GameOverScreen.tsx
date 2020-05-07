@@ -1,10 +1,11 @@
 import React from "react";
-import { View, StyleSheet, Button, Image, Text } from "react-native";
+import { View, StyleSheet, Image, Text } from "react-native";
 import { UserNumber } from "../App";
 import { TitleText } from "../components/TitleText";
 import { BodyText } from "../components/BodyText";
 
 import SuccessImage from "../assets/success.png";
+import PsopassppafImage from "../assets/psopassppaf.gif";
 import { Colors } from "../constants/colors";
 import { MainButton } from "../components/MainButton";
 
@@ -22,7 +23,7 @@ const GameOverScreen = (props: GameOverScreenProps) => {
         <Image
           fadeDuration={1000}
           style={styles.image}
-          source={SuccessImage}
+          source={PsopassppafImage}
           // source={{
           //   uri:
           //     "https://cdn.pixabay.com/photo/2016/05/05/23/52/mountain-summit-1375015_960_720.jpg",
@@ -32,14 +33,11 @@ const GameOverScreen = (props: GameOverScreenProps) => {
       </View>
       <View style={styles.resultContainer}>
         <BodyText style={styles.resultText}>
-          Your phone needed{" "}
-          <Text style={styles.highlight}>{props.roundsNumber}</Text> rounds to
-          guess the number{" "}
-          <Text style={styles.highlight}>{props.userNumber}</Text>
+          Your phone needed <Text style={styles.highlight}>{props.roundsNumber}</Text> rounds to guess the
+          number <Text style={styles.highlight}>{props.userNumber}</Text>
         </BodyText>
       </View>
       <MainButton onPress={props.onRestart}>NEW GAME</MainButton>
-      
     </View>
   );
 };
