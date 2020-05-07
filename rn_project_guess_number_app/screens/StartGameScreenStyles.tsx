@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     marginVertical: 10,
+    fontFamily: "OpenSans-Bold",
   },
   inputContainer: {
     width: 300,
@@ -30,5 +31,8 @@ export const styles = StyleSheet.create({
   summaryContainer: {
     marginTop: 20,
     alignItems: "center",
+  },
+  text: {
+    fontFamily: "OpenSans-Regular",
   },
 });

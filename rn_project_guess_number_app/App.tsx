@@ -5,6 +5,27 @@ import { StartGameScreen } from "./screens/StartGameScreen";
 import { GameScreen } from "./screens/GameScreen";
 import { GameOverScreen } from "./screens/GameOverScreen";
 
+// I am not using expo you can use expo-font
+/*
+import {AppLoading} from 'expo';
+import * as Font from 'expo-font';
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+  });
+}
+
+const [dataLoaded, setDataLoaded] = useState(false);
+
+if(!dataLoaded) {
+  return (<AppLoading startAsync={fetchFonts}
+     onFinish={() => setDataLoaded(true)}
+     onError={(err) => console.log(err)}
+     />);
+}
+*/
+
 export type UserNumber = null | number;
 
 const App: () => React.ReactNode = () => {
