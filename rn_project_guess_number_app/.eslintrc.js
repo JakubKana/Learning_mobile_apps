@@ -12,6 +12,18 @@ module.exports = {
     eqeqeq: 2,
     curly: 2,
     quotes: [2, "double"],
+    "max-len": [
+      "error",
+      110,
+      2,
+      {
+        ignoreUrls: true,
+        ignoreComments: false,
+        ignoreRegExpLiterals: true,
+        ignoreStrings: false,
+        ignoreTemplateLiterals: false,
+      },
+    ],
   },
 };
 // "react-hooks/rules-of-hooks": "error",

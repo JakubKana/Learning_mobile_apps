@@ -1,9 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, Button, Alert } from "react-native";
+import { View, Text, Alert, ScrollView, FlatList, ListRenderItemInfo } from "react-native";
 import { NumberContainer } from "../components/NumberContainer";
 import { Card } from "../components/Card";
 import { styles as defaultStyles } from "../constants/default-styles";
 import { styles } from "./GameScreenStyles";
+import { MainButton } from "../components/MainButton";
+
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { BodyText } from "../components/BodyText";
 
 interface GameScreenProps {
   userChoice: number;
@@ -25,11 +29,17 @@ const genRandom = (min: number, max: number, exclude: number): number => {
   }
 };
 
+const renderListItem = (listLength: number, itemData: ListRenderItemInfo<string>) => (
+  <View key={itemData.item} style={styles.listItem}>
+    <BodyText>#{listLength - itemData.index}</BodyText>
+    <BodyText>{itemData.item}</BodyText>
+  </View>
+);
+
 const GameScreen = (props: GameScreenProps) => {
-  const [currentGuess, setCurrentGuess] = useState(
-    genRandom(1, 100, props.userChoice),
-  );
-  const [rounds, setRounds] = useState(0);
+  const initialGuess = genRandom(1, 100, props.userChoice);
+  const [currentGuess, setCurrentGuess] = useState(initialGuess);
+  const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
 
@@ -37,7 +47,7 @@ const GameScreen = (props: GameScreenProps) => {
 
   useEffect(() => {
     if (currentGuess === props.userChoice) {
-      props.onGameOver(rounds);
+      props.onGameOver(pastGuesses.length);
     }
   }, [currentGuess, userChoice, onGameOver]);
 
@@ -46,25 +56,19 @@ const GameScreen = (props: GameScreenProps) => {
       (direction === "LOWER" && currentGuess < props.userChoice) ||
       (direction === "GREATER" && currentGuess > props.userChoice)
     ) {
-      Alert.alert("Don' lie!", "You know that this is wrong...", [
-        { text: "Sorry!", style: "cancel" },
-      ]);
+      Alert.alert("Don' lie!", "You know that this is wrong...", [{ text: "Sorry!", style: "cancel" }]);
       return;
     }
     if (direction === "LOWER") {
       currentHigh.current = currentGuess;
     } else {
-      currentLow.current = currentGuess;
+      currentLow.current = currentGuess + 1;
     }
 
-    const nextNumber = genRandom(
-      currentLow.current,
-      currentHigh.current,
-      currentGuess,
-    );
+    const nextNumber = genRandom(currentLow.current, currentHigh.current, currentGuess);
 
     setCurrentGuess(nextNumber);
-    setRounds(curRounds => curRounds + 1);
+    setPastGuesses(curPastGuesses => [nextNumber.toString(), ...curPastGuesses]);
   };
 
   return (
@@ -72,9 +76,26 @@ const GameScreen = (props: GameScreenProps) => {
       <Text style={defaultStyles.title}>Opponent's guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
-        <Button title="LOWER" onPress={() => nextGuessHandler("LOWER")} />
-        <Button title="GREATER" onPress={() => nextGuessHandler("GREATER")} />
+        <MainButton onPress={() => nextGuessHandler("LOWER")}>
+          <Ionicons name={"md-remove"} size={24} color="white" />
+        </MainButton>
+        <MainButton onPress={() => nextGuessHandler("GREATER")}>
+          <Ionicons name={"md-add"} size={24} color="white" />
+        </MainButton>
       </Card>
+      <View style={styles.listContainer}>
+        {/* <ScrollView contentContainerStyle={styles.list}>
+          {pastGuesses.map((guess, index) =>
+            renderListItem(guess, pastGuesses.length - index),
+          )}
+        </ScrollView> */}
+        <FlatList
+          keyExtractor={item => item}
+          data={pastGuesses}
+          renderItem={item => renderListItem(pastGuesses.length, item)}
+          contentContainerStyle={styles.list}
+        />
+      </View>
     </View>
   );
 };

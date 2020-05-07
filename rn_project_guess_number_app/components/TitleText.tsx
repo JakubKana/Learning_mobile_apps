@@ -3,7 +3,7 @@ import { Text, StyleSheet, TextStyle } from "react-native";
 
 interface TitleTextProps {
   children: React.ReactNode;
-  style: TextStyle;
+  style?: TextStyle;
 }
 
 const TitleText = (props: TitleTextProps) => {
