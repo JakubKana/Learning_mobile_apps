@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 export const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -11,8 +11,9 @@ export const styles = StyleSheet.create({
     fontFamily: "OpenSans-Bold",
   },
   inputContainer: {
-    width: 300,
-    maxWidth: "80%",
+    width: "80%",
+    maxWidth: "95%",
+    minWidth: 300,
     alignItems: "center",
   },
   buttonContainer: {
@@ -22,7 +23,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   button: {
-    width: 100,
+    // width: 100,
+    width: Dimensions.get("window").width / 4,
   },
   input: {
     width: 50,
