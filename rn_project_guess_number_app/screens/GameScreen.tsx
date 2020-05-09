@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, Alert, ScrollView, FlatList, ListRenderItemInfo } from "react-native";
+import { View, Text, Alert, ScrollView, FlatList, ListRenderItemInfo, Dimensions } from "react-native";
 import { NumberContainer } from "../components/NumberContainer";
 import { Card } from "../components/Card";
 import { styles as defaultStyles } from "../constants/default-styles";
@@ -71,6 +71,12 @@ const GameScreen = (props: GameScreenProps) => {
     setPastGuesses(curPastGuesses => [nextNumber.toString(), ...curPastGuesses]);
   };
 
+  let listContainerStyle = styles.listContainer;
+
+  if (Dimensions.get("window").width < 350) {
+    listContainerStyle = styles.listContainerBig;
+  }
+
   return (
     <View style={styles.screen}>
       <Text style={defaultStyles.title}>Opponent's guess</Text>
@@ -83,7 +89,7 @@ const GameScreen = (props: GameScreenProps) => {
           <Ionicons name={"md-add"} size={24} color="white" />
         </MainButton>
       </Card>
-      <View style={styles.listContainer}>
+      <View style={listContainerStyle}>
         {/* <ScrollView contentContainerStyle={styles.list}>
           {pastGuesses.map((guess, index) =>
             renderListItem(guess, pastGuesses.length - index),
