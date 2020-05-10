@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ViewStyle } from "react-native";
+import { View, StyleSheet, ViewStyle, StyleProp } from "react-native";
 
 interface CardProps {
   children: React.ReactNode;
@@ -7,9 +7,7 @@ interface CardProps {
 }
 
 const Card = (props: CardProps): JSX.Element => {
-  return (
-    <View style={{ ...styles.card, ...props.style }}>{props.children}</View>
-  );
+  return <View style={{ ...styles.card, ...props.style }}>{props.children}</View>;
 };
 
 const styles = StyleSheet.create({

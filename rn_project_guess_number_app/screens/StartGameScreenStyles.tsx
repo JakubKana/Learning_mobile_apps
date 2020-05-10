@@ -22,10 +22,10 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 15,
   },
-  button: {
-    // width: 100,
-    width: Dimensions.get("window").width / 4,
-  },
+  // button: {
+  //   // width: 100,
+  //   width: Dimensions.get("window").width / 4,
+  // },
   input: {
     width: 50,
     textAlign: "center",

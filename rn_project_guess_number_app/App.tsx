@@ -48,17 +48,9 @@ const App: () => React.ReactNode = () => {
   let content = <StartGameScreen onStartGame={startGameHandler} />;
 
   if (userNumber && guessRounds <= 0) {
-    content = (
-      <GameScreen userChoice={userNumber} onGameOver={gameOverHandler} />
-    );
+    content = <GameScreen userChoice={userNumber} onGameOver={gameOverHandler} />;
   } else if (guessRounds > 0) {
-    content = (
-      <GameOverScreen
-        roundsNumber={guessRounds}
-        userNumber={userNumber}
-        onRestart={initNewGame}
-      />
-    );
+    content = <GameOverScreen roundsNumber={guessRounds} userNumber={userNumber} onRestart={initNewGame} />;
   }
   return (
     <View style={styles.screen}>

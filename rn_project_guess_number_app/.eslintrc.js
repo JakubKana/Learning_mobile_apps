@@ -24,6 +24,7 @@ module.exports = {
         ignoreTemplateLiterals: false,
       },
     ],
+    "react-native/no-inline-styles": 0,
   },
 };
 // "react-hooks/rules-of-hooks": "error",

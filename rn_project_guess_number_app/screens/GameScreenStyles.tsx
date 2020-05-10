@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -8,9 +8,14 @@ export const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: Dimensions.get("window").height > 600 ? 20 : 5,
     width: 300,
     maxWidth: "90%",
+  },
+  controls: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "80%",
   },
   listContainer: {
     flex: 1,
