@@ -1,15 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  View,
-  Text,
-  Alert,
-  ScrollView,
-  FlatList,
-  ListRenderItemInfo,
-  Dimensions,
-  ViewStyle,
-  StyleSheet,
-} from "react-native";
+import { View, Text, Alert, FlatList, ListRenderItemInfo, Dimensions, StyleSheet } from "react-native";
 import { NumberContainer } from "../components/NumberContainer";
 import { Card } from "../components/Card";
 import { styles as defaultStyles } from "../constants/default-styles";
@@ -137,7 +127,7 @@ const GameScreen = (props: GameScreenProps) => {
           <Ionicons name="md-remove" size={24} color="white" />
         </MainButton>
         <NumberContainer>{currentGuess}</NumberContainer>
-        <MainButton onPress={() => nextGuessHandler("LOWER")}>
+        <MainButton onPress={() => nextGuessHandler("GREATER")}>
           <Ionicons name="md-add" size={24} color="white" />
         </MainButton>
       </View>
