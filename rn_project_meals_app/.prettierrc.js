@@ -6,5 +6,5 @@ module.exports = {
   endOfLine: "auto",
   tabWidth: 2,
   arrowParens: "avoid",
-  printWidth: 110
+  printWidth: 120
 };

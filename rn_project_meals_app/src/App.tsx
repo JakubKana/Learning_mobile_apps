@@ -1,6 +1,6 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text } from "react-native";
-import { MealsNavigatorContainer } from "./navigation/MealsNavigatorInit";
+import { StyleSheet } from "react-native";
+import { MealsNavigatorContainer } from "./navigation/MealsNavigator";
 const App: () => JSX.Element = () => {
   return <MealsNavigatorContainer />;
 };

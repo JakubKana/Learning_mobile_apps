@@ -14,7 +14,7 @@ module.exports = {
     quotes: [2, "double"],
     "max-len": [
       "error",
-      110,
+      120,
       2,
       {
         ignoreUrls: true,
