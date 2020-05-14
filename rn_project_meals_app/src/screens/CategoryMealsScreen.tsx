@@ -1,9 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
 import { CATEGORIES, MEALS } from "../data/dummy-data";
 import { Meal } from "../models/meals";
 import { ItemData } from "../lib/types";
+import { MealItem } from "../components/MealItem";
+import { ROUTE_NAMES } from "../navigation/names";
 
 interface CategoryMealScreenProps {
   navigation: StackNavigationProp;
@@ -11,10 +13,20 @@ interface CategoryMealScreenProps {
 
 const CategoryMealScreen = (props: CategoryMealScreenProps): JSX.Element => {
   const renderMealItem = (itemData: ItemData<Meal>) => {
+    const { title, duration, complexity, affordability, imageUrl } = itemData.item;
     return (
-      <View>
-        <Text>{itemData.item.title}</Text>
-      </View>
+      <MealItem
+        title={title}
+        duration={duration}
+        complexity={complexity}
+        affordability={affordability}
+        image={imageUrl}
+        onSelectMeal={() => {
+          props.navigation.navigate(ROUTE_NAMES.mealDetail, {
+            mealId: itemData.item.id,
+          });
+        }}
+      />
     );
   };
 
@@ -24,7 +36,12 @@ const CategoryMealScreen = (props: CategoryMealScreenProps): JSX.Element => {
 
   return (
     <View style={styles.screen}>
-      <FlatList data={displayedMeals} keyExtractor={(item, index) => item.id} renderItem={renderMealItem} />
+      <FlatList
+        data={displayedMeals}
+        keyExtractor={(item, index) => item.id}
+        renderItem={renderMealItem}
+        style={styles.categoryList}
+      />
     </View>
   );
 };
@@ -58,10 +75,14 @@ CategoryMealScreen.navigationOptions = (navigationData: any) => {
 };
 
 const styles = StyleSheet.create({
+  categoryList: {
+    width: "100%",
+  },
   screen: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 15,
   },
 });
 

@@ -6,7 +6,7 @@ import { CATEGORIES } from "../data/dummy-data";
 import { CategoryGridItem } from "../components/CategoryGridItem";
 import { ItemData } from "../lib/types";
 import { Category } from "../models/category";
-import { NAMES } from "../navigation/names";
+import { ROUTE_NAMES } from "../navigation/names";
 interface CategoriesScreenProps {
   navigation: NavigationStackProp;
 }
@@ -23,7 +23,7 @@ const CategoriesScreen = (props: CategoriesScreenProps): JSX.Element => {
         onSelect={() => {
           // alternative (Names.categoryMeals, {categoryID: YOUR_DATA})
           props.navigation.navigate({
-            routeName: NAMES.categoryMeals,
+            routeName: ROUTE_NAMES.categoryMeals,
             params: {
               categoryId: itemData.item.id,
             },

@@ -1,7 +1,7 @@
-const NAMES = {
+const ROUTE_NAMES = {
   categories: "Categories",
   categoryMeals: "CategoryMeals",
   mealDetail: "MealDetail",
 };
 
-export { NAMES };
+export { ROUTE_NAMES };
