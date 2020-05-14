@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 
 interface FiltersScreenProps {}
 
-const FiltersScreen = (props: FiltersScreenProps) => {
+const FiltersScreen = (props: FiltersScreenProps): JSX.Element => {
   return (
     <View style={styles.screen}>
       <Text>The Filters Screen</Text>

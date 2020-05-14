@@ -6,7 +6,7 @@ interface MealDetailScreenProps {
   navigation: NavigationStackProp;
 }
 
-const MealDetailScreen = (props: MealDetailScreenProps) => {
+const MealDetailScreen = (props: MealDetailScreenProps): JSX.Element => {
   return (
     <View style={styles.screen}>
       <Text>The MealDetail Screen</Text>

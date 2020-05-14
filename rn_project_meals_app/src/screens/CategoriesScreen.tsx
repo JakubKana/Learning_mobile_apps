@@ -1,13 +1,12 @@
 import React from "react";
-import { StyleSheet, FlatList, View, Platform, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, FlatList } from "react-native";
 import { NavigationStackProp } from "react-navigation-stack";
 
 import { CATEGORIES } from "../data/dummy-data";
+import { CategoryGridItem } from "../components/CategoryGridItem";
 import { ItemData } from "../lib/types";
 import { Category } from "../models/category";
 import { NAMES } from "../navigation/names";
-import { Colors } from "../constants/colors";
-
 interface CategoriesScreenProps {
   navigation: NavigationStackProp;
 }
@@ -15,24 +14,22 @@ interface CategoriesScreenProps {
 //   [key: string]: any;
 // }
 
-const CategoriesScreen: Element = (props: CategoriesScreenProps) => {
+const CategoriesScreen = (props: CategoriesScreenProps): JSX.Element => {
   const renderGridItem = (itemData: ItemData<Category>) => {
     return (
-      <TouchableOpacity
-        style={styles.mealItem}
-        onPress={() => {
+      <CategoryGridItem
+        title={itemData.item.title}
+        color={itemData.item.color}
+        onSelect={() => {
+          // alternative (Names.categoryMeals, {categoryID: YOUR_DATA})
           props.navigation.navigate({
             routeName: NAMES.categoryMeals,
             params: {
               categoryId: itemData.item.id,
             },
           });
-          // alternative (Names.categoryMeals, {categoryID: YOUR_DATA})
-        }}>
-        <View>
-          <Text>{itemData.item.title}</Text>
-        </View>
-      </TouchableOpacity>
+        }}
+      />
     );
   };
 
@@ -44,10 +41,6 @@ const CategoriesScreen: Element = (props: CategoriesScreenProps) => {
 //@ts-ignore
 CategoriesScreen.navigationOptions = {
   headerTitle: "Meals Categories",
-  headerStyle: {
-    backgroundColor: Platform.OS === "android" ? Colors.primary : "white",
-  },
-  headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
 };
 
 const styles = StyleSheet.create({
@@ -55,11 +48,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  mealItem: {
-    flex: 1,
-    margin: 15,
-    height: 120,
   },
 });
 
