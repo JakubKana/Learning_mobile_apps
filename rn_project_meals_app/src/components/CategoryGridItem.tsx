@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.6,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 10,
-    elevation: 3,
     padding: 15,
     justifyContent: "flex-end",
     alignItems: "flex-end",
@@ -46,9 +45,10 @@ const styles = StyleSheet.create({
   gridItem: {
     flex: 1,
     borderRadius: 10,
-    overflow: "hidden",
+    overflow: Platform.OS === "android" && Platform.Version >= 21 ? "hidden" : "visible",
     margin: 15,
     height: 120,
+    elevation: 5,
   },
   title: {
     fontFamily: "OpenSans-Bold",

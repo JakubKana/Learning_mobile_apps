@@ -2,6 +2,8 @@ import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { NavigationStackProp } from "react-navigation-stack";
 import { MEALS } from "../data/dummy-data";
+import { HeaderButton } from "../components/HeaderButton";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 interface MealDetailScreenProps {
   navigation: NavigationStackProp;
@@ -25,11 +27,17 @@ const MealDetailScreen = (props: MealDetailScreenProps): JSX.Element => {
   );
 };
 
-
 MealDetailScreen.navigationOptions = (navigationData: any) => {
   const mealId = navigationData.navigation.getParam("mealId");
   const selectedMeal = MEALS.find(m => m.id === mealId);
-  return { headerTitle: selectedMeal?.title };
+  return {
+    headerTitle: selectedMeal?.title,
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item title="Favorite" iconName="md-star" onPress={() => console.log("Mark as fav!")} />
+      </HeaderButtons>
+    ),
+  };
 };
 
 const styles = StyleSheet.create({
