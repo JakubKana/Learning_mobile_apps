@@ -9,6 +9,7 @@ import { Category } from "../models/category";
 import { ROUTE_NAMES } from "../navigation/names";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { HeaderButton } from "../components/HeaderButton";
+import { NavigationStackProp } from "react-navigation-stack";
 interface CategoriesScreenProps {
   navigation: NavigationStackProp;
 }
