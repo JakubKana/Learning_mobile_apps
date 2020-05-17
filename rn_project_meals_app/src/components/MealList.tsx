@@ -5,6 +5,8 @@ import { Meal } from "../models/meals";
 import { MealItem } from "./MealItem";
 import { ROUTE_NAMES } from "../navigation/names";
 import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
+import { useSelector } from "react-redux";
+import { RootState } from "../App";
 
 interface MealListProps {
   listData: Meal[];
@@ -12,8 +14,11 @@ interface MealListProps {
 }
 
 const MealList = (props: MealListProps) => {
+  // React hook can be used on the root of functions no in nested functions like renderMealItem that is not valid use
+  const favoriteMeals = useSelector((state: RootState) => state.meals.favoriteMeals);
   const renderMealItem = (itemData: ItemData<Meal>) => {
     const { title, duration, complexity, affordability, imageUrl } = itemData.item;
+    const isFavorite = favoriteMeals.some(m => m.id === itemData.item.id);
     return (
       <MealItem
         title={title}
@@ -24,6 +29,8 @@ const MealList = (props: MealListProps) => {
         onSelectMeal={() => {
           props.navigation.navigate(ROUTE_NAMES.mealDetail, {
             mealId: itemData.item.id,
+            mealTitle: itemData.item.title,
+            isFav: isFavorite,
           });
         }}
       />

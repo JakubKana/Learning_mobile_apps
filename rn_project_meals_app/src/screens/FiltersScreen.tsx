@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
+import { useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { HeaderButton } from "../components/HeaderButton";
 import { Switch } from "react-native-paper";
 import { Colors } from "../constants/colors";
 import { NavigationStackProp } from "react-navigation-stack";
 import { NavigationDrawerProp } from "react-navigation-drawer";
+import { setFilters, FilterSettings } from "../store/actions/meals";
 
 interface FiltersScreenProps {
   navigation: NavigationStackProp;
@@ -32,21 +34,20 @@ const FilterSwitch = (props: FilterSwitchProps) => {
 };
 
 const FiltersScreen = (props: FiltersScreenProps): JSX.Element => {
-  const { navigation } = props;
-
+  const dispatch = useDispatch();
   const [isGlutenFree, setIsGlutenFree] = useState<boolean>(false);
   const [isLactoseFree, setIsLactoseFree] = useState<boolean>(false);
   const [isVegan, setIsVegan] = useState<boolean>(false);
   const [isVegetarian, setIsVegetarian] = useState<boolean>(false);
 
   const saveFilters = useCallback(() => {
-    const appliedFilters = {
+    const appliedFilters: FilterSettings = {
       glutenFree: isGlutenFree,
       lactoseFree: isLactoseFree,
       vegan: isVegan,
       vegetarian: isVegetarian,
     };
-
+    dispatch(setFilters(appliedFilters));
     console.log(appliedFilters);
   }, [isGlutenFree, isLactoseFree, isVegan, isVegetarian]);
   // If you had existin params, you still use setParams(). Your new params get merged with existing params.

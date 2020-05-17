@@ -5,7 +5,7 @@ import { enableScreens } from "react-native-screens";
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import { MealsNavigatorContainer } from "./navigation/MealsNavigator";
-
+import { composeWithDevTools } from "redux-devtools-extension";
 import { mealsReducer, State } from "./store/reducers/meals";
 
 export type RootState = {
@@ -17,7 +17,11 @@ enableScreens(true);
 const rootReducers = combineReducers({
   meals: mealsReducer,
 });
-const store = createStore(rootReducers);
+
+let store = createStore(rootReducers);
+if (__DEV__ === true) {
+  store = createStore(rootReducers, composeWithDevTools());
+}
 
 const App: () => JSX.Element = () => {
   return (
