@@ -1,5 +1,14 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+  TouchableNativeFeedback,
+  Platform,
+} from "react-native";
 import { Base } from "../../constants/Colors";
 
 interface ProductItemProps {
@@ -11,18 +20,28 @@ interface ProductItemProps {
 }
 
 const ProductItem = (props: ProductItemProps) => {
+  let TouchableComp: any = TouchableOpacity;
+  if (Platform.OS === "android" && Platform.Version >= 21) {
+    TouchableComp = TouchableNativeFeedback;
+  }
   return (
     <View style={styles.product}>
-      <View style={styles.imageContainer}>
-        <Image style={styles.image} source={{ uri: props.image }} />
-      </View>
-      <View style={styles.detail}>
-        <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.price}>{props.price.toFixed(2)}</Text>
-      </View>
-      <View style={styles.actions}>
-        <Button color={Base.primary} title="View Details" onPress={props.onViewDetail} />
-        <Button color={Base.primary} title="To Cart" onPress={props.onAddToCart} />
+      <View style={styles.touchable}>
+        <TouchableComp onPress={props.onViewDetail} useForeground>
+          <View>
+            <View style={styles.imageContainer}>
+              <Image style={styles.image} source={{ uri: props.image }} />
+            </View>
+            <View style={styles.detail}>
+              <Text style={styles.title}>{props.title}</Text>
+              <Text style={styles.price}>{props.price.toFixed(2)}</Text>
+            </View>
+            <View style={styles.actions}>
+              <Button color={Base.primary} title="View Details" onPress={props.onViewDetail} />
+              <Button color={Base.primary} title="To Cart" onPress={props.onAddToCart} />
+            </View>
+          </View>
+        </TouchableComp>
       </View>
     </View>
   );
@@ -70,6 +89,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "15%",
     padding: 10,
+  },
+  touchable: {
+    borderRadius: 10,
+    overflow: "hidden",
   },
 });
 
