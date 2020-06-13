@@ -1,3 +1,3 @@
-import { ProductState, CartState } from "../../store/reducers/types";
+import { ProductState, CartState, OrdersState } from "../../store/reducers/types";
 
-export type RootState = { products: ProductState; cart: CartState };
+export type RootState = { products: ProductState; cart: CartState; orders: OrdersState };

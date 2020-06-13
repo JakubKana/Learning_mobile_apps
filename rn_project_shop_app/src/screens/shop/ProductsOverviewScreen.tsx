@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, Text, Platform } from "react-native";
+import { FlatList, Platform } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { ProductItem } from "../../components/shop/ProductItem";
 import { NavigationStackProp } from "react-navigation-stack";
@@ -9,6 +9,7 @@ import * as cartActions from "../../store/actions/cart";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { CustomHeaderButton } from "../../components/UI/HeaderButton";
+
 interface ProductsOverviewScreenProps {
   navigation: NavigationStackProp;
 }
@@ -40,9 +41,20 @@ const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
   );
 };
 
-ProductsOverviewScreen.navigationOptions = (navData: { navigation: NavigationStackProp }) => {
+ProductsOverviewScreen.navigationOptions = (navData: { navigation: any }) => {
   return {
     headerTitle: "All Products",
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title="Menu"
+          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+          onPress={() => {
+            navData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
         <Item
