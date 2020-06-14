@@ -6,10 +6,11 @@ import { isAndroid } from "../../lib/platform";
 import { Base } from "../../constants/Colors";
 
 interface CartItemProps {
-  onRemove: () => void;
+  onRemove?: () => void;
   quantity: number;
   title: string;
   amount: number;
+  deletable: boolean;
 }
 
 const CartItem = (props: CartItemProps) => {
@@ -21,9 +22,11 @@ const CartItem = (props: CartItemProps) => {
       </Text>
       <View style={styles.itemData}>
         <Text style={styles.mainText}>${props.amount.toFixed(2)}</Text>
-        <TouchableOpacity onPress={props.onRemove} style={styles.deleteButton}>
-          <Ionicons name={isAndroid() ? "md-trash" : "ios-trash"} size={23} color="red" />
-        </TouchableOpacity>
+        {props.deletable && (
+          <TouchableOpacity onPress={props.onRemove} style={styles.deleteButton}>
+            <Ionicons name={isAndroid() ? "md-trash" : "ios-trash"} size={23} color="red" />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

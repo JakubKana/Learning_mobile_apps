@@ -1,22 +1,12 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  Button,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  Platform,
-} from "react-native";
-import { Base } from "../../constants/Colors";
-
+import { View, Text, Image, StyleSheet, TouchableOpacity, TouchableNativeFeedback, Platform } from "react-native";
+import { Card } from "../UI/Card";
 interface ProductItemProps {
   image: string;
   title: string;
   price: number;
-  onViewDetail: () => void;
-  onAddToCart: () => void;
+  onSelect: () => void;
+  children: React.ReactNode;
 }
 
 const ProductItem = (props: ProductItemProps) => {
@@ -25,9 +15,9 @@ const ProductItem = (props: ProductItemProps) => {
     TouchableComp = TouchableNativeFeedback;
   }
   return (
-    <View style={styles.product}>
+    <Card style={styles.product}>
       <View style={styles.touchable}>
-        <TouchableComp onPress={props.onViewDetail} useForeground>
+        <TouchableComp onPress={props.onSelect} useForeground>
           <View>
             <View style={styles.imageContainer}>
               <Image style={styles.image} source={{ uri: props.image }} />
@@ -36,26 +26,16 @@ const ProductItem = (props: ProductItemProps) => {
               <Text style={styles.title}>{props.title}</Text>
               <Text style={styles.price}>${props.price.toFixed(2)}</Text>
             </View>
-            <View style={styles.actions}>
-              <Button color={Base.primary} title="View Details" onPress={props.onViewDetail} />
-              <Button color={Base.primary} title="To Cart" onPress={props.onAddToCart} />
-            </View>
+            <View style={styles.actions}>{props.children}</View>
           </View>
         </TouchableComp>
       </View>
-    </View>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
   product: {
-    shadowColor: "#000",
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5,
-    borderRadius: 10,
-    backgroundColor: "#FFF",
     height: 300,
     margin: 20,
   },
@@ -84,12 +64,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: "25%",
+    height: "23%",
     paddingHorizontal: 20,
   },
   detail: {
     alignItems: "center",
-    height: "15%",
+    height: "17%",
     padding: 10,
   },
   touchable: {

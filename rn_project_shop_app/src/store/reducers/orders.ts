@@ -12,7 +12,7 @@ type OrdersActions = ActionType & {
 };
 
 export function ordersReducer(state: OrdersState = initState, action: OrdersActions) {
-   // eslint-disable-next-line eqeqeq
+  // eslint-disable-next-line eqeqeq
   if (action.type == ADD_ORDER) {
     const newOrder = new Order(new Date().toString(), action.orderData.items, action.orderData.amount, new Date());
     return {

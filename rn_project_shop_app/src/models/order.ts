@@ -1,4 +1,5 @@
 import { CartItem } from "../screens/shop/CartScreen";
+import moment from "moment";
 
 class Order {
   private _id: string;
@@ -11,6 +12,17 @@ class Order {
     this._items = items;
     this._totalAmount = totalAmount;
     this._date = date;
+  }
+
+  get readableDate() {
+    // return this._date.toLocaleDateString("en-EN", {
+    //   year: "numeric",
+    //   month: "long",
+    //   day: "numeric",
+    //   hour: "2-digit",
+    //   minute: "2-digit",
+    // });
+    return moment(this.date).format("MMMM Do YYYY, hh:mm");
   }
 
   public get id(): string {

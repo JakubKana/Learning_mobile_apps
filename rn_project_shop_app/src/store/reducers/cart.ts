@@ -3,6 +3,7 @@ import { ADD_TO_CART, REMOVE_FROM_CART } from "../actions/cart";
 import { Product } from "../../models/product";
 import { CartItem } from "../../models/cart-Item";
 import { ADD_ORDER } from "../actions/orders";
+import { DELETE_PRODUCT } from "../actions/products";
 
 const initState: CartState = {
   items: {},
@@ -11,6 +12,7 @@ const initState: CartState = {
 
 type CartActionType = ActionType & {
   product: Product;
+  pid: string;
 };
 
 export function cartReducer(state: CartState = initState, action: CartActionType) {
@@ -72,5 +74,19 @@ export function cartReducer(state: CartState = initState, action: CartActionType
     return initState;
   }
 
+  // eslint-disable-next-line eqeqeq
+  if (action.type == DELETE_PRODUCT) {
+    if (!state.items[action.pid]) {
+      return state;
+    }
+    const updatedItems = { ...state.items };
+    const itemTotal = state.items[action.pid].sum;
+    delete updatedItems[action.pid];
+    return {
+      ...state,
+      items: updatedItems,
+      totalAmount: state.totalAmount - itemTotal,
+    };
+  }
   return state;
 }

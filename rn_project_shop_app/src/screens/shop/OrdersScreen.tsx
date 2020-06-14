@@ -5,6 +5,7 @@ import { RootState } from "./types";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { CustomHeaderButton } from "../../components/UI/HeaderButton";
+import { OrderItem } from "../../components/shop/OrderItem";
 
 interface OrdersScreenProps {}
 
@@ -14,7 +15,9 @@ const OrdersScreen = (_props: OrdersScreenProps) => {
     <FlatList
       data={orders}
       keyExtractor={item => item.id}
-      renderItem={itemData => <Text>{itemData.item.totalAmount}</Text>}
+      renderItem={itemData => (
+        <OrderItem amount={itemData.item.totalAmount} date={itemData.item.readableDate} items={itemData.item.items} />
+      )}
     />
   );
 };

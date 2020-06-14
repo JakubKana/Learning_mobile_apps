@@ -1,11 +1,12 @@
 import React from "react";
-import { FlatList, Platform } from "react-native";
+import { FlatList, Platform, Button } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { ProductItem } from "../../components/shop/ProductItem";
 import { NavigationStackProp } from "react-navigation-stack";
 import { KEYS } from "../../navigation/NavigationKeys";
 import { RootState } from "./types";
 import * as cartActions from "../../store/actions/cart";
+import { Base } from "../../constants/Colors";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { CustomHeaderButton } from "../../components/UI/HeaderButton";
@@ -17,6 +18,14 @@ interface ProductsOverviewScreenProps {
 const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
   const products = useSelector((state: RootState) => state.products.availableProducts);
   const dispatch = useDispatch();
+
+  const selectItemHandler = (id: string, title: string) => {
+    props.navigation.navigate({
+      routeName: KEYS.ProductDetail,
+      params: { productId: id, productTitle: title },
+    });
+  };
+
   return (
     <FlatList
       data={products}
@@ -26,16 +35,24 @@ const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
           image={itemData.item.imageUrl}
           title={itemData.item.title}
           price={itemData.item.price}
-          onAddToCart={() => {
-            dispatch(cartActions.addToCart(itemData.item));
-          }}
-          onViewDetail={() => {
-            props.navigation.navigate({
-              routeName: KEYS.ProductDetail,
-              params: { productId: itemData.item.id, productTitle: itemData.item.title },
-            });
-          }}
-        />
+          onSelect={() => {
+            selectItemHandler(itemData.item.id, itemData.item.title);
+          }}>
+          <Button
+            color={Base.primary}
+            title="View Details"
+            onPress={() => {
+              selectItemHandler(itemData.item.id, itemData.item.title);
+            }}
+          />
+          <Button
+            color={Base.primary}
+            title="To Cart"
+            onPress={() => {
+              dispatch(cartActions.addToCart(itemData.item));
+            }}
+          />
+        </ProductItem>
       )}
     />
   );

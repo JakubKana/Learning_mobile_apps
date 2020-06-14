@@ -4,4 +4,7 @@ export const KEYS = {
   Cart: "Cart",
   Orders: "Orders",
   Products: "Products",
+  UserProducts: "UserProducts",
+  EditProduct: "EditProduct",
+  Admin: "Admin",
 };
