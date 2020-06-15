@@ -21,7 +21,7 @@ const UserProductsScreen = (props: UserProductsScreenProps) => {
   const editProductHandler = (id: string) => {
     props.navigation.navigate(KEYS.EditProduct, { productId: id });
   };
-  const deleteHandler = id => {
+  const deleteHandler = (id: string) => {
     Alert.alert("Are you sure?", "Do you really want to delete this item?", [
       {
         text: "No",
