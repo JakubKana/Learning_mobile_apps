@@ -1,8 +1,12 @@
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import { productsReducer } from "./reducers/products";
 import { cartReducer } from "./reducers/cart";
 import { ordersReducer } from "./reducers/orders";
-import { devToolsEnhancer } from "redux-devtools-extension";
+import { composeWithDevTools } from "redux-devtools-extension";
+
+import ReduxThunk from "redux-thunk";
+
+const composeEnhancer = composeWithDevTools({ name: "Shop App" });
 
 const rootReducer = combineReducers({
   products: productsReducer,
@@ -10,6 +14,6 @@ const rootReducer = combineReducers({
   orders: ordersReducer,
 });
 
-const store = createStore(rootReducer, devToolsEnhancer({ name: "Shop App" }));
+const store = createStore(rootReducer, composeEnhancer(applyMiddleware(ReduxThunk)));
 
 export { store };

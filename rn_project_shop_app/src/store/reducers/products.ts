@@ -1,11 +1,12 @@
 import { PRODUCTS } from "../../data/mock-data";
 import { ProductState, ProductsState, ActionType } from "./types";
-import { DELETE_PRODUCT, CREATE_PRODUCT, ProductData, UPDATE_PRODUCT } from "../actions/products";
+import { DELETE_PRODUCT, CREATE_PRODUCT, ProductData, UPDATE_PRODUCT, SET_PRODUCTS } from "../actions/products";
 import { Product } from "../../models/product";
 
 type ProductsActions = ActionType & {
   pid: string;
   productData: ProductData;
+  products: Product[];
 };
 
 const initState: ProductsState = {
@@ -22,11 +23,18 @@ export function productsReducer(state: ProductState = initState, action: Product
       availableProducts: state.availableProducts.filter(prod => prod.id !== action.pid),
     };
   }
+  // eslint-disable-next-line eqeqeq
+  if (action.type == SET_PRODUCTS) {
+    return {
+      availableProducts: action.products,
+      userProducts: action.products.filter(prod => prod.ownerId === "u1"),
+    };
+  }
 
   // eslint-disable-next-line eqeqeq
   if (action.type == CREATE_PRODUCT) {
     const newProduct = new Product(
-      new Date().toString(),
+      action.productData.id,
       "u1",
       action.productData.title,
       action.productData.imageUrl,
