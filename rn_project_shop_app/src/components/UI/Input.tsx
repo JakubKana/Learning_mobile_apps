@@ -77,12 +77,10 @@ const Input = (props: InputProps) => {
     if (props.minLength != null && text.length < props.minLength) {
       isValid = false;
     }
-    console.log("textchangeHandler");
     dispatch({ type: INPUT_CHANGE, value: text, isValid });
   };
 
   const lostFocusHandler = () => {
-    console.log("Lost focus Handler");
     dispatch({ type: INPUT_BLUR });
   };
 

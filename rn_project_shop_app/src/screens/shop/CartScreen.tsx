@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, FlatList, Button, StyleSheet, ListRenderItemInfo } from "react-native";
+import React, { useState } from "react";
+import { View, Text, FlatList, Button, StyleSheet, ListRenderItemInfo, ActivityIndicator } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./types";
 import { Base } from "../../constants/Colors";
@@ -19,6 +19,8 @@ export type CartItem = {
 };
 
 const CartScreen = (_props: CartScreenProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const cartTotalAmount = useSelector((state: RootState) => state.cart.totalAmount);
   const cartItems = useSelector((state: RootState) => {
     const cartItemsRemapped: CartItem[] = [];
@@ -33,7 +35,15 @@ const CartScreen = (_props: CartScreenProps) => {
     }
     return cartItemsRemapped.sort((a, b) => (a.productId > b.productId ? 1 : -1));
   });
+
   const dispatch = useDispatch();
+
+  const sendOrderHandler = async () => {
+    setIsLoading(true);
+    await dispatch(orderActions.addOrder(cartItems, cartTotalAmount));
+    setIsLoading(false);
+  };
+
   const renderCartItem = (itemData: ListRenderItemInfo<CartItem>) => {
     return (
       <CartItem
@@ -54,14 +64,11 @@ const CartScreen = (_props: CartScreenProps) => {
         <Text style={styles.summaryText}>
           Total: <Text style={styles.amount}>${Math.round(parseFloat(cartTotalAmount.toFixed(2)) * 100) / 100}</Text>
         </Text>
-        <Button
-          color={Base.accent}
-          title="Order Now"
-          onPress={() => {
-            dispatch(orderActions.addOrder(cartItems, cartTotalAmount));
-          }}
-          disabled={cartItems.length === 0}
-        />
+        {isLoading ? (
+          <ActivityIndicator size="small" color={Base.primary} />
+        ) : (
+          <Button color={Base.accent} title="Order Now" onPress={sendOrderHandler} disabled={cartItems.length === 0} />
+        )}
       </Card>
       <FlatList data={cartItems} keyExtractor={item => item.productId} renderItem={renderCartItem} />
     </View>

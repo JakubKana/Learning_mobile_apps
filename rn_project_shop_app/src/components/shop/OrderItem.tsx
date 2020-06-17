@@ -13,7 +13,6 @@ interface OrderItemProps {
 
 const OrderItem = (props: OrderItemProps) => {
   const [showDetails, setShowDetails] = useState<boolean>(false);
-
   return (
     <Card style={styles.orderItem}>
       <View style={styles.summary}>

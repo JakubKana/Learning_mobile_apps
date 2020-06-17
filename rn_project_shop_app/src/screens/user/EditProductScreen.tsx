@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEffect, useCallback, useReducer } from "react";
-import { View, ScrollView, StyleSheet, Platform, Alert, KeyboardAvoidingView } from "react-native";
+import { View, ScrollView, StyleSheet, Platform, Alert, KeyboardAvoidingView, ActivityIndicator } from "react-native";
 import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { CustomHeaderButton } from "../../components/UI/HeaderButton";
@@ -9,6 +9,7 @@ import { RootState } from "../shop/types";
 import * as productsActions from "../../store/actions/products";
 import { ActionType } from "../../store/reducers/types";
 import { Input } from "../../components/UI/Input";
+import { Base } from "../../constants/Colors";
 
 interface EditProductScreenProps {
   navigation: StackNavigationProp;
@@ -49,6 +50,9 @@ const formReducer = (state: FormReducerState, action: ActionType): FormReducerSt
 };
 
 const EditProductScreen = (props: EditProductScreenProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<null | string>("");
+
   const prodId = props.navigation.getParam("productId");
   const editedProduct = useSelector((state: RootState) => state.products.userProducts.find(prod => prod.id === prodId));
   const dispatch = useDispatch();
@@ -69,20 +73,33 @@ const EditProductScreen = (props: EditProductScreenProps) => {
     formIsValid: editedProduct ? true : false,
   });
 
-  const submitHandler = useCallback(() => {
+  useEffect(() => {
+    if (error) {
+      Alert.alert("An error occured!", error, [{ text: "Okay" }]);
+    }
+  }, [error]);
+
+  const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
       Alert.alert("Wrong input!", "Please check the errors in the form.", [{ text: "Okay" }]);
       return;
     }
     const { title, description, imageUrl, price } = formState.inputValues;
-    if (editedProduct) {
-      console.log("Edited product", prodId);
-      dispatch(productsActions.updateProduct(prodId, title, description, imageUrl));
-    } else {
-      console.log("New");
-      dispatch(productsActions.createProduct(title, description, imageUrl, +price));
+
+    setError(null);
+    setIsLoading(true);
+    try {
+      if (editedProduct) {
+        await dispatch(productsActions.updateProduct(prodId, title, description, imageUrl));
+      } else {
+        await dispatch(productsActions.createProduct(title, description, imageUrl, +price));
+      }
+      props.navigation.goBack();
+    } catch (err) {
+      setError(err.message);
     }
-    props.navigation.goBack();
+
+    setIsLoading(false);
   }, [dispatch, prodId, formState]);
 
   useEffect(() => {
@@ -100,6 +117,14 @@ const EditProductScreen = (props: EditProductScreenProps) => {
     },
     [dispatchFormState],
   );
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={Base.primary} />
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" keyboardVerticalOffset={100}>
@@ -183,6 +208,11 @@ EditProductScreen.navigationOptions = (navData: { navigation: StackNavigationPro
 const styles = StyleSheet.create({
   form: {
     margin: 20,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

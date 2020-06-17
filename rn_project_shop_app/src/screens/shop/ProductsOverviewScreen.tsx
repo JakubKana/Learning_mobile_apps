@@ -19,22 +19,37 @@ interface ProductsOverviewScreenProps {
 const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<null | string>(null);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const products = useSelector((state: RootState) => state.products.availableProducts);
 
   const dispatch = useDispatch();
+
   const loadProducts = useCallback(async () => {
     setError(null);
-    setIsLoading(true);
+    setIsRefreshing(true);
     try {
       await dispatch(productsActions.fetchProducts());
     } catch (err) {
       setError(err.message);
     }
-    setIsLoading(false);
+    setIsRefreshing(false);
   }, [dispatch, setIsLoading, setError]);
 
   useEffect(() => {
-    loadProducts();
+    const willFocusSub = props.navigation.addListener("willFocus", () => {
+      loadProducts();
+      // clean up function
+      return () => {
+        willFocusSub.remove();
+      };
+    });
+  }, [loadProducts]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    loadProducts().then(() => {
+      setIsLoading(false);
+    });
   }, [dispatch, loadProducts]);
 
   const selectItemHandler = (id: string, title: string) => {
@@ -71,6 +86,8 @@ const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
 
   return (
     <FlatList
+      onRefresh={loadProducts}
+      refreshing={isRefreshing}
       data={products}
       keyExtractor={item => item.id}
       renderItem={itemData => (
