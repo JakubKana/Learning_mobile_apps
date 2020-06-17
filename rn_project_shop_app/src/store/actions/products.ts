@@ -95,7 +95,6 @@ export const createProduct = (title: string, description: string, imageUrl: stri
 
 export const updateProduct = (id: string, title: string, description: string, imageUrl: string) => {
   return async (dispatch: Dispatch) => {
-
     const response = await fetch(`https://rn-shop-app-21030.firebaseio.com/products/${id}.json`, {
       method: "PATCH",
       headers: {

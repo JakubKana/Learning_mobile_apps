@@ -33,7 +33,7 @@ const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
       setError(err.message);
     }
     setIsRefreshing(false);
-  }, [dispatch, setIsLoading, setError]);
+  }, [dispatch, setError, setIsRefreshing]);
 
   useEffect(() => {
     const willFocusSub = props.navigation.addListener("willFocus", () => {
@@ -43,7 +43,7 @@ const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
         willFocusSub.remove();
       };
     });
-  }, [loadProducts]);
+  }, [loadProducts, props.navigation]);
 
   useEffect(() => {
     setIsLoading(true);

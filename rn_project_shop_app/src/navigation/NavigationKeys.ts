@@ -7,4 +7,6 @@ export const KEYS = {
   UserProducts: "UserProducts",
   EditProduct: "EditProduct",
   Admin: "Admin",
+  Auth: "Auth",
+  Shop: "Shop",
 };

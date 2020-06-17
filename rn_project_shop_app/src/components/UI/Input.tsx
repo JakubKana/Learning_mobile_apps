@@ -7,7 +7,7 @@ type InputProps = TextInputProps & {
   label: string;
   errorText: string;
   required?: boolean;
-  email?: string;
+  email?: boolean;
   min?: number;
   max?: number;
   minLength?: number;

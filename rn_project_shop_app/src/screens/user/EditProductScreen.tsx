@@ -100,11 +100,11 @@ const EditProductScreen = (props: EditProductScreenProps) => {
     }
 
     setIsLoading(false);
-  }, [dispatch, prodId, formState]);
+  }, [dispatch, prodId, formState, editedProduct, props.navigation]);
 
   useEffect(() => {
     props.navigation.setParams({ submit: submitHandler });
-  }, [submitHandler]);
+  }, [submitHandler, props.navigation]);
 
   const inputChangeHandler = useCallback(
     (inputIdentifier: string, inputValue: string, inputValidity: boolean) => {
