@@ -12,10 +12,12 @@ export type ProductData = {
   description: string;
   imageUrl: string;
   price: number;
+  ownerId: string;
 };
 
 export const fetchProducts = () => {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch, getState: any) => {
+    const userId = getState().auth.userId;
     try {
       // add async code you want!
       // FETCH ANY KIND OF HTTP REQUEST
@@ -32,7 +34,7 @@ export const fetchProducts = () => {
         loadedProducts.push(
           new Product(
             key,
-            "u1",
+            resData[key].ownerId,
             resData[key].title,
             resData[key].imageUrl,
             resData[key].description,
@@ -41,7 +43,11 @@ export const fetchProducts = () => {
         );
       }
 
-      dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+      dispatch({
+        type: SET_PRODUCTS,
+        products: loadedProducts,
+        userProducts: loadedProducts.filter(prod => prod.ownerId === userId),
+      });
     } catch (error) {
       //send to custom analytics server
       throw error;
@@ -50,8 +56,10 @@ export const fetchProducts = () => {
 };
 
 export function deleteProduct(productId: string) {
-  return async (dispatch: Dispatch) => {
-    const response = await fetch(`https://rn-shop-app-21030.firebaseio.com/products/${productId}.json`, {
+  return async (dispatch: Dispatch, getState: any) => {
+    const token = getState().auth.token;
+
+    const response = await fetch(`https://rn-shop-app-21030.firebaseio.com/products/${productId}.json?auth=${token}`, {
       method: "DELETE",
     });
     if (!response.ok) {
@@ -62,10 +70,12 @@ export function deleteProduct(productId: string) {
 }
 
 export const createProduct = (title: string, description: string, imageUrl: string, price: number) => {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch, getState: any) => {
+    const token = getState().auth.token;
+    const userId = getState().auth.userId;
     // add async code you want!
     // FETCH ANY KIND OF HTTP REQUEST
-    const response = await fetch("https://rn-shop-app-21030.firebaseio.com/products.json", {
+    const response = await fetch(`https://rn-shop-app-21030.firebaseio.com/products.json?auth=${token}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,6 +85,7 @@ export const createProduct = (title: string, description: string, imageUrl: stri
         description,
         imageUrl,
         price,
+        ownerId: userId,
       }),
     });
 
@@ -88,14 +99,17 @@ export const createProduct = (title: string, description: string, imageUrl: stri
         description,
         imageUrl,
         price,
+        ownerId: userId,
       },
     });
   };
 };
 
 export const updateProduct = (id: string, title: string, description: string, imageUrl: string) => {
-  return async (dispatch: Dispatch) => {
-    const response = await fetch(`https://rn-shop-app-21030.firebaseio.com/products/${id}.json`, {
+  return async (dispatch: Dispatch, getState: any) => {
+    const token = getState().auth.token;
+
+    const response = await fetch(`https://rn-shop-app-21030.firebaseio.com/products/${id}.json?auth=${token}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

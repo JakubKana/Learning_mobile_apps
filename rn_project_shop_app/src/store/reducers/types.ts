@@ -14,3 +14,8 @@ export type CartState = { items: { [name: string]: CartItem }; totalAmount: numb
 export type ProductsState = { availableProducts: Array<Product>; userProducts: Array<Product> };
 
 export type OrdersState = { orders: Array<Order> };
+
+export type AuthState = {
+  token: null | string;
+  userId: null | string;
+};

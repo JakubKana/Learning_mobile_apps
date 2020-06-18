@@ -9,4 +9,5 @@ export const KEYS = {
   Admin: "Admin",
   Auth: "Auth",
   Shop: "Shop",
+  Startup: "Startup",
 };

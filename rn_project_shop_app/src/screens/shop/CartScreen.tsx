@@ -67,7 +67,7 @@ const CartScreen = (_props: CartScreenProps) => {
         {isLoading ? (
           <ActivityIndicator size="small" color={Base.primary} />
         ) : (
-          <Button color={Base.accent} title="Order Now" onPress={sendOrderHandler} disabled={cartItems.length === 0} />
+          <Button color={Base.accentDarker} title="Order Now" onPress={sendOrderHandler} disabled={cartItems.length === 0} />
         )}
       </Card>
       <FlatList data={cartItems} keyExtractor={item => item.productId} renderItem={renderCartItem} />

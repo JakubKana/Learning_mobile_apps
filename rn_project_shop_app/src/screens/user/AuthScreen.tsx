@@ -1,5 +1,6 @@
-import React, { useReducer, useCallback } from "react";
-import { KeyboardAvoidingView, ScrollView, StyleSheet, Button, View } from "react-native";
+import React from "react";
+import { useReducer, useCallback, useState, useEffect } from "react";
+import { KeyboardAvoidingView, ScrollView, StyleSheet, Button, View, ActivityIndicator, Alert } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { Input } from "../../components/UI/Input";
 import { Card } from "../../components/UI/Card";
@@ -8,8 +9,12 @@ import { Base } from "../../constants/Colors";
 import { useDispatch } from "react-redux";
 import * as authActions from "../../store/actions/auth";
 import { ActionType } from "../../store/reducers/types";
+import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
+import { KEYS } from "../../navigation/NavigationKeys";
 
-interface AuthScreenProps {}
+interface AuthScreenProps {
+  navigation: StackNavigationProp;
+}
 
 type InputValidities = { [name: string]: boolean };
 type InputValues = { email: string; password: string };
@@ -45,9 +50,11 @@ const formReducer = (state: FormReducerState, action: ActionType): FormReducerSt
   return state;
 };
 
-const AuthScreen = (_props: AuthScreenProps) => {
+const AuthScreen = (props: AuthScreenProps) => {
   const dispatch = useDispatch();
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<null | string>(null);
+  const [isSignup, setIsSignup] = useState<boolean>(false);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       email: "",
@@ -60,8 +67,28 @@ const AuthScreen = (_props: AuthScreenProps) => {
     formIsValid: false,
   });
 
-  const signUpHandler = () => {
-    dispatch(authActions.signup(formState.inputValues.email, formState.inputValues.password));
+  useEffect(() => {
+    if (error) {
+      Alert.alert("An Error Occured!", error, [{ text: "Okay" }]);
+    }
+  }, [error]);
+
+  const authHandler = async () => {
+    let action: null | any = null;
+    if (isSignup) {
+      action = authActions.signup(formState.inputValues.email, formState.inputValues.password);
+    } else {
+      action = authActions.login(formState.inputValues.email, formState.inputValues.password);
+    }
+    setError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(action);
+      props.navigation.navigate(KEYS.Shop);
+    } catch (err) {
+      setError(err.message);
+      setIsLoading(false);
+    }
   };
 
   const inputChangeHandler = useCallback(
@@ -98,16 +125,26 @@ const AuthScreen = (_props: AuthScreenProps) => {
               keyboardType="default"
               secureTextEntry
               required
-              minLength={5}
+              minLength={6}
               autoCapitalize="none"
               errorText="Please enter a valid password."
               onInputChanged={inputChangeHandler}
             />
             <View style={styles.buttonContainer}>
-              <Button title="Login" color={Base.primary} onPress={signUpHandler} />
+              {isLoading === true ? (
+                <ActivityIndicator size="small" color={Base.primary} />
+              ) : (
+                <Button title={isSignup ? "Sign Up" : "Login"} color={Base.primary} onPress={authHandler} />
+              )}
             </View>
             <View style={styles.buttonContainer}>
-              <Button title="Switch to Sign Up" color={Base.accent} onPress={() => {}} />
+              <Button
+                title={`Switch to ${isSignup ? "Login" : "Sign Up"}`}
+                color={Base.accentDarker}
+                onPress={() => {
+                  setIsSignup(prevState => !prevState);
+                }}
+              />
             </View>
           </ScrollView>
         </Card>

@@ -46,12 +46,25 @@ const OrdersScreen = (_props: OrdersScreenProps) => {
     </View>;
   }
 
+  if (orders.length === 0) {
+    return (
+      <View style={styles.centered}>
+        <Text>No order found, maybe start ordering some products?</Text>
+      </View>
+    );
+  }
+
   return (
     <FlatList
       data={orders}
       keyExtractor={item => item.id}
       renderItem={itemData => (
-        <OrderItem amount={itemData.item.totalAmount} date={itemData.item.readableDate} items={itemData.item.items} />
+        <OrderItem
+          key={itemData.item.id}
+          amount={itemData.item.totalAmount}
+          date={itemData.item.readableDate}
+          items={itemData.item.items}
+        />
       )}
     />
   );

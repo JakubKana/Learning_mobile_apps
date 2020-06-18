@@ -1,16 +1,24 @@
 import React from "react";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
-import { createDrawerNavigator } from "react-navigation-drawer";
-
-import { Platform } from "react-native";
+import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
+import { useDispatch } from "react-redux";
+import { Platform, SafeAreaView, Button, View } from "react-native";
 import { Base } from "../constants/Colors";
 import { KEYS } from "./NavigationKeys";
 import { ProductDetailScreen, ProductsOverviewScreen, CartScreen, OrdersScreen } from "../screens/shop";
+import { StartupScreen } from "../screens/StartUpScreen";
 import { EditProductScreen, AuthScreen } from "../screens/user";
 import { isAndroid } from "../lib/platform";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { UserProductsScreen } from "../screens/user/UserProductsScreen";
+import * as authActions from "../store/actions/auth";
+
+type ShopNavigatorProps = any;
+// {
+//   navigation: NavigationDrawerProp;
+//   [name: string]: any;
+// };
 
 const defaultNavOptions = {
   headerStyle: {
@@ -76,6 +84,25 @@ const AdminNavigator = createStackNavigator(
   },
 );
 
+const drawerComponent = (props: ShopNavigatorProps) => {
+  const dispatch = useDispatch();
+  return (
+    <View style={{ flex: 1, padding: 20 }}>
+      <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+        <DrawerItems {...props} />
+        <Button
+          title="Logout"
+          color={Base.primary}
+          onPress={() => {
+            dispatch(authActions.logout());
+            // props.navigation.navigate(KEYS.Auth);
+          }}
+        />
+      </SafeAreaView>
+    </View>
+  );
+};
+
 const ShopNavigator = createDrawerNavigator(
   {
     [KEYS.Products]: ProductsNavigator,
@@ -86,6 +113,7 @@ const ShopNavigator = createDrawerNavigator(
     contentOptions: {
       activeTintColor: Base.primary,
     },
+    contentComponent: drawerComponent,
   },
 );
 
@@ -97,6 +125,7 @@ const AuthNavigator = createStackNavigator(
 );
 
 const MainNavigator = createSwitchNavigator({
+  [KEYS.Startup]: StartupScreen,
   [KEYS.Auth]: AuthNavigator,
   [KEYS.Shop]: ShopNavigator,
 });

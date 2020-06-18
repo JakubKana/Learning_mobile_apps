@@ -56,7 +56,6 @@ const EditProductScreen = (props: EditProductScreenProps) => {
   const prodId = props.navigation.getParam("productId");
   const editedProduct = useSelector((state: RootState) => state.products.userProducts.find(prod => prod.id === prodId));
   const dispatch = useDispatch();
-
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       title: editedProduct ? editedProduct.title : "",
@@ -100,11 +99,11 @@ const EditProductScreen = (props: EditProductScreenProps) => {
     }
 
     setIsLoading(false);
-  }, [dispatch, prodId, formState, editedProduct, props.navigation]);
+  }, [dispatch, prodId, formState]);
 
   useEffect(() => {
     props.navigation.setParams({ submit: submitHandler });
-  }, [submitHandler, props.navigation]);
+  }, [submitHandler]);
 
   const inputChangeHandler = useCallback(
     (inputIdentifier: string, inputValue: string, inputValidity: boolean) => {
