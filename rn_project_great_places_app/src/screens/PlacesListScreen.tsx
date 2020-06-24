@@ -1,19 +1,46 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, FlatList } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import { CustomHeaderButton } from "../components/CustomHeaderButton";
 import { isAndroid } from "../lib/platform";
 import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
 import { KEYS } from "../navigation/NavigationKeys";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/types";
+import { Place } from "../models/place";
+import { PlaceItem } from "../components/PlaceItem";
+import * as placesActions from "../store/actions/places";
 
-interface PlacesListScreenProps {}
+interface PlacesListScreenProps {
+  navigation: StackNavigationProp;
+}
 
-const PlacesListScreen = (_props: PlacesListScreenProps) => {
+const PlacesListScreen = (props: PlacesListScreenProps) => {
+  const places: Place[] = useSelector((state: RootState) => state.places.places);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(placesActions.loadPlaces());
+  }, [dispatch]);
+
   return (
-    <View>
-      <Text>PlacesListScreen</Text>
-    </View>
+    <FlatList
+      data={places}
+      keyExtractor={item => item.id}
+      renderItem={itemData => (
+        <PlaceItem
+          image={itemData.item.imageUri}
+          onSelect={() => {
+            props.navigation.navigate(KEYS.PlaceDetail, {
+              placeTitle: itemData.item.title,
+              placeId: itemData.item.id,
+            });
+          }}
+          title={itemData.item.title}
+        />
+      )}
+    />
   );
 };
 
