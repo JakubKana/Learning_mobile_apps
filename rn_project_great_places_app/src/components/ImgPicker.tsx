@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import { View, Button, Text, StyleSheet, Image, PermissionsAndroid, Alert } from "react-native";
+import { View, Button, Text, StyleSheet, Image, Alert } from "react-native";
 import { Colors } from "../constants/colors";
-
+import * as Permissions from "react-native-permissions";
 import ImagePicker, { ImagePickerResponse } from "react-native-image-picker";
 
-interface ImagePickerProps {
+interface ImgPickerProps {
   onImageTake: (uri: string) => void;
 }
 
-const ImgPicker = (props: ImagePickerProps) => {
+const ImgPicker = (props: ImgPickerProps) => {
   const [pickedImage, setPickedImage] = useState<string>("");
 
   const verifyPermissions = async () => {
-    const result = await PermissionsAndroid.check("android.permission.CAMERA");
-    if (result === false) {
+    const result = await Permissions.request(Permissions.PERMISSIONS.ANDROID.CAMERA);
+    if (result !== "granted") {
       Alert.alert("Insufficient permissions!", "You need to grant camera permissions to use this app", [
         { text: "Okay" },
       ]);

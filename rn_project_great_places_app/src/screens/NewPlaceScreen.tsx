@@ -4,7 +4,8 @@ import { Colors } from "../constants/colors";
 import * as placesActions from "../store/actions/places";
 import { useDispatch } from "react-redux";
 import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
-import { ImgPicker } from "../components/ImageSelector";
+import { ImgPicker } from "../components/ImgPicker";
+import { LocationPicker } from "../components/LocationPicker";
 
 interface NewPlaceScreenProps {
   navigation: StackNavigationProp;
@@ -35,6 +36,7 @@ const NewPlaceScreen = (props: NewPlaceScreenProps) => {
         <Text style={styles.label}>Title</Text>
         <TextInput style={styles.textInput} onChangeText={titleChangeHandler} value={titleValue} />
         <ImgPicker onImageTake={imageTakenHandler} />
+        <LocationPicker />
         <Button title="Save Place" color={Colors.primary} onPress={savePlaceHandler} />
       </View>
     </ScrollView>
