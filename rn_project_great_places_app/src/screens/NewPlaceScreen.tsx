@@ -1,19 +1,21 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Button, ScrollView, TextInput } from "react-native";
+import React, { useState, useCallback } from "react";
+import { View, Text, StyleSheet, Button, ScrollView, TextInput, Alert } from "react-native";
 import { Colors } from "../constants/colors";
 import * as placesActions from "../store/actions/places";
 import { useDispatch } from "react-redux";
 import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
 import { ImgPicker } from "../components/ImgPicker";
-import { LocationPicker } from "../components/LocationPicker";
+import { LocationPicker, Coords } from "../components/LocationPicker";
 
 interface NewPlaceScreenProps {
   navigation: StackNavigationProp;
 }
 
 const NewPlaceScreen = (props: NewPlaceScreenProps) => {
-  const [titleValue, setTitleValue] = useState("");
+  const [titleValue, setTitleValue] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState<string>("");
+  const [selectedLocation, setSelectedLocation] = useState<Coords>();
+
   const dispatch = useDispatch();
 
   const titleChangeHandler = (text: string) => {
@@ -21,12 +23,20 @@ const NewPlaceScreen = (props: NewPlaceScreenProps) => {
     setTitleValue(text);
   };
 
+  const locationPickedHandler = useCallback((location: Coords) => {
+    setSelectedLocation(location);
+  }, []);
+
   const imageTakenHandler = (imagePath: string) => {
     setSelectedImage(imagePath);
   };
 
   const savePlaceHandler = () => {
-    dispatch(placesActions.addPlace(titleValue, selectedImage));
+    if (!selectedLocation) {
+      Alert.alert("Location is not selected!", "Please select location!", [{ text: "Okay" }]);
+      return;
+    }
+    dispatch(placesActions.addPlace(titleValue, selectedImage, selectedLocation));
     props.navigation.goBack();
   };
 
@@ -36,7 +46,7 @@ const NewPlaceScreen = (props: NewPlaceScreenProps) => {
         <Text style={styles.label}>Title</Text>
         <TextInput style={styles.textInput} onChangeText={titleChangeHandler} value={titleValue} />
         <ImgPicker onImageTake={imageTakenHandler} />
-        <LocationPicker />
+        <LocationPicker navigation={props.navigation} onLocationPicked={locationPickedHandler} />
         <Button title="Save Place" color={Colors.primary} onPress={savePlaceHandler} />
       </View>
     </ScrollView>
