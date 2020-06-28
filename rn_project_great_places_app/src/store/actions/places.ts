@@ -2,6 +2,7 @@ import * as RNFS from "react-native-fs";
 import { Dispatch } from "redux";
 import { insertPlace, fetchPlaces } from "../../helpers/db";
 import { Coords } from "../../components/LocationPicker";
+import { ENV } from "../../../env";
 
 export const ADD_PLACE = "ADD_PLACE";
 export const SET_PLACES = "SET_PLACES";

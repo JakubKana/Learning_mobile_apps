@@ -17,8 +17,8 @@ const MapScreen = (props: MapScreenProps) => {
   const readonly = props.navigation.getParam("readonly");
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number }>();
   const mapRegion = {
-    latitude: initialLocation?.lat ?? 37.78,
-    longitude: initialLocation?.lng ?? -122.43,
+    latitude: initialLocation ? initialLocation.lat : 37.78,
+    longitude: initialLocation ? initialLocation.lng : -122.43,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { TouchableOpacity, Image, StyleSheet, View, ViewStyle } from "react-native";
+import { TouchableOpacity, Image, StyleSheet, ViewStyle } from "react-native";
 import { ENV } from "../../env";
 
 interface MapPreviewProps {
