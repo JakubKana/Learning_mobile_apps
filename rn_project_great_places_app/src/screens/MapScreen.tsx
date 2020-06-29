@@ -13,17 +13,48 @@ interface MapScreenProps {
 }
 
 const MapScreen = (props: MapScreenProps) => {
-  const initialLocation: Coords | undefined = props.navigation.getParam("intialLocation");
+  const initialLocation: any = props.navigation.getParam("initialLocation");
   const readonly = props.navigation.getParam("readonly");
-  const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number }>();
-  const mapRegion = {
-    latitude: initialLocation ? initialLocation.lat : 37.78,
-    longitude: initialLocation ? initialLocation.lng : -122.43,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+  const [selectedLocation, setSelectedLocation] = useState<null | { lat: number; lng: number }>(null);
+  console.log("INIT LOCATION", initialLocation);
+
+  const getRegionFromCoordinates = (points: Coords[]) => {
+    let minX: number;
+    let maxX: number;
+    let minY: number;
+    let maxY: number;
+    ((point: Coords) => {
+      minX = point.lat;
+      maxX = point.lat;
+      minY = point.lng;
+      maxY = point.lng;
+    })(points[0]);
+
+    points.map(point => {
+      minX = Math.min(minX, point.lat);
+      maxX = Math.max(maxX, point.lat);
+      minY = Math.min(minY, point.lng);
+      maxY = Math.max(maxY, point.lng);
+    });
+
+    const midX = (minX + maxX) / 2;
+    const midY = (minY + maxY) / 2;
+    const deltaX = maxX - minX + 0.0009;
+    const deltaY = maxY - minY + 0.0009;
+
+    return {
+      latitude: midX,
+      longitude: midY,
+      latitudeDelta: deltaX,
+      longitudeDelta: deltaY,
+    };
   };
 
+  const mapRegion =
+    initialLocation && getRegionFromCoordinates([{ lat: initialLocation.lat, lng: initialLocation.lng }]);
+
   const selectLocationHandler = (event: MapEvent) => {
+    console.log("SelectLocationHandler", readonly, event.nativeEvent.coordinate);
     if (readonly) {
       return;
     }
@@ -31,13 +62,14 @@ const MapScreen = (props: MapScreenProps) => {
   };
 
   const savePickedLocationHandler = useCallback(() => {
+    console.log("SavePickedLocationHandler", selectedLocation);
     if (!selectedLocation) {
       // could show an alert!
       Alert.alert("No location picked!", "Try picking location on map.", [{ text: "Okay" }]);
       return;
     }
     props.navigation.navigate(KEYS.NewPlace, { pickedLocation: selectedLocation });
-  }, []);
+  }, [selectedLocation]);
 
   useEffect(() => {
     props.navigation.setParams({ saveLocation: savePickedLocationHandler });

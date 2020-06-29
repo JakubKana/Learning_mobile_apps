@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/types";
 import { Colors } from "../constants/colors";
 import { KEYS } from "../navigation/NavigationKeys";
+import { Coords } from "../components/LocationPicker";
 
 interface PlaceDetailScreenProps {
   navigation: StackNavigationProp;
@@ -17,9 +18,11 @@ const PlaceDetailScreen = (props: PlaceDetailScreenProps) => {
   const selectedPlace = useSelector((state: RootState) => state.places.places.find(place => place.id === placeId));
 
 
-  const selectedLocation = selectedPlace && { lat: selectedPlace.lat, lng: selectedPlace.lng };
+  const selectedLocation: any = selectedPlace && { lat: selectedPlace.lat, lng: selectedPlace.lng };
 
   const showMapHandler = () => {
+    console.log("Show map handler");
+    console.log("initialLocation", selectedLocation);
     props.navigation.navigate(KEYS.Map, { readonly: true, initialLocation: selectedLocation });
   };
 

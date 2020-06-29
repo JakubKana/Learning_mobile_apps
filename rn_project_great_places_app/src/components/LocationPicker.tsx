@@ -23,11 +23,14 @@ const LocationPicker = (props: LocationPickerProps) => {
 
   const mapPickedLocation = props.navigation.getParam("pickedLocation");
 
+  const { onLocationPicked } = props;
+
   useEffect(() => {
     if (mapPickedLocation) {
       setPickedLocation(mapPickedLocation);
+      onLocationPicked(mapPickedLocation);
     }
-  }, [mapPickedLocation]);
+  }, [mapPickedLocation, onLocationPicked]);
 
   const verifyPermissions = async () => {
     const result = await Permissions.request(Permissions.PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
@@ -76,7 +79,7 @@ const LocationPicker = (props: LocationPickerProps) => {
   };
 
   const pickOnMapHandler = () => {
-    props.navigation.navigate(KEYS.Map);
+    props.navigation.navigate(KEYS.Map, { readonly: false });
   };
 
   return (
