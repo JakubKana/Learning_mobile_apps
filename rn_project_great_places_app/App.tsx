@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Component } from "react";
 
 import { AppNavigator } from "./src/navigation/PlacesNavigator";
 import { Provider } from "react-redux";
 import { store } from "./src/store";
 import { init } from "./src/helpers/db";
+import SplashScreen from "react-native-splash-screen";
 
 init()
   .then(() => {
@@ -14,12 +15,18 @@ init()
     console.error(error);
   });
 
-const App = () => {
-  return (
-    <Provider store={store}>
-      <AppNavigator />
-    </Provider>
-  );
-};
+class App extends Component {
+  componentDidMount() {
+    SplashScreen.hide();
+  }
+
+  render() {
+    return (
+      <Provider store={store}>
+        <AppNavigator />
+      </Provider>
+    );
+  }
+}
 
 export { App };
