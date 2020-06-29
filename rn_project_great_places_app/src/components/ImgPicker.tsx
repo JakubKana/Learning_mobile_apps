@@ -31,7 +31,7 @@ const ImgPicker = (props: ImgPickerProps) => {
         title: "Take a photo",
         allowsEditing: true,
         maxHeight: 200,
-        quality: 0.5,
+        quality: 0.8,
       },
       (response: ImagePickerResponse) => {
         setPickedImage(response.uri);
