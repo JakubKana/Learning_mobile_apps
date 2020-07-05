@@ -1,16 +1,23 @@
 import React from "react";
 import { View, Text, StyleSheet, Button, ScrollView, Image, Alert } from "react-native";
-import { NavigationStackProp } from "react-navigation-stack";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./types";
 import { Base } from "../../constants/Colors";
 import * as cartActions from "../../store/actions/cart";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type RootStackParamList = {
+  ProductDetail: { productId: string; productTitle: string };
+};
+
+type ProductDetailScreenNavigationProp = StackNavigationProp<{ ProductDetail: { productId: string } }, "ProductDetail">;
+
 interface ProductDetailScreenProps {
-  navigation: NavigationStackProp;
+  navigation: ProductDetailScreenNavigationProp;
 }
 
 const ProductDetailScreen = (props: ProductDetailScreenProps) => {
-  const productId = props.navigation.getParam("productId");
+  const productId = props.navigation.route.params.productId;
   const selectedProduct = useSelector((state: RootState) => state.products.availableProducts).find(
     prod => prod.id === productId,
   );
@@ -38,9 +45,9 @@ const ProductDetailScreen = (props: ProductDetailScreenProps) => {
   );
 };
 
-ProductDetailScreen.navigationOptions = (navData: { navigation: NavigationStackProp }) => {
+export const screenOptions = (navData: { navigation: StackNavigationProp }) => {
   return {
-    headerTitle: navData.navigation.getParam("productTitle"),
+    headerTitle: navData.navigation.route.params.productTitle,
   };
 };
 

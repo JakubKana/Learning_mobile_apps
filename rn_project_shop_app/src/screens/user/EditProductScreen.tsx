@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useEffect, useCallback, useReducer } from "react";
 import { View, ScrollView, StyleSheet, Platform, Alert, KeyboardAvoidingView, ActivityIndicator } from "react-native";
-import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { CustomHeaderButton } from "../../components/UI/HeaderButton";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,6 +9,7 @@ import * as productsActions from "../../store/actions/products";
 import { ActionType } from "../../store/reducers/types";
 import { Input } from "../../components/UI/Input";
 import { Base } from "../../constants/Colors";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 interface EditProductScreenProps {
   navigation: StackNavigationProp;
@@ -53,7 +53,7 @@ const EditProductScreen = (props: EditProductScreenProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | string>("");
 
-  const prodId = props.navigation.getParam("productId");
+  const prodId = props.navigation.route.params ? props.navigation.route.params.productId : null;
   const editedProduct = useSelector((state: RootState) => state.products.userProducts.find(prod => prod.id === prodId));
   const dispatch = useDispatch();
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -102,7 +102,17 @@ const EditProductScreen = (props: EditProductScreenProps) => {
   }, [dispatch, prodId, formState]);
 
   useEffect(() => {
-    props.navigation.setParams({ submit: submitHandler });
+    props.navigation.setOptions({
+      headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title="Save"
+            iconName={Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"}
+            onPress={submitHandler}
+          />
+        </HeaderButtons>
+      ),
+    });
   }, [submitHandler]);
 
   const inputChangeHandler = useCallback(
@@ -186,21 +196,10 @@ const EditProductScreen = (props: EditProductScreenProps) => {
   );
 };
 
-EditProductScreen.navigationOptions = (navData: { navigation: StackNavigationProp }) => {
-  const submitFn = navData.navigation.getParam("submit");
+export const screenOptions = (navData: { navigation: StackNavigationProp }) => {
+  const routeParams = navData.navigation.route.params ? navData.navigation.route.params : {};
   return {
-    headerTitle: navData.navigation.getParam("productId") ? "Edit Product" : "Add Product",
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title="Save"
-          iconName={Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"}
-          onPress={() => {
-            submitFn();
-          }}
-        />
-      </HeaderButtons>
-    ),
+    headerTitle: routeParams.productId ? "Edit Product" : "Add Product",
   };
 };
 

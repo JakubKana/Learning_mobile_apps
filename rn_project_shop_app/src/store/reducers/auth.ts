@@ -1,9 +1,10 @@
 import { ActionType, AuthState } from "./types";
-import { AUTHENTICATE, LOGOUT } from "../actions/auth";
+import { AUTHENTICATE, LOGOUT, SET_DID_TRY_AL } from "../actions/auth";
 
 const initState: AuthState = {
   token: null,
   userId: null,
+  didTryAutoLogin: false,
 };
 
 type AuthActionType = ActionType & {
@@ -17,11 +18,19 @@ export function authReducer(state: AuthState = initState, action: AuthActionType
     return {
       token: action.token,
       userId: action.userId,
+      didTryAutoLogin: true,
+    };
+  }
+  // eslint-disable-next-line eqeqeq
+  if (action.type == SET_DID_TRY_AL) {
+    return {
+      ...state,
+      didTryAutoLogin: true,
     };
   }
   // eslint-disable-next-line eqeqeq
   if (action.type == LOGOUT) {
-    return initState;
+    return { ...initState, didTryAutoLogin: true };
   }
   //   if (action.type == SIGNUP) {
   //     return {

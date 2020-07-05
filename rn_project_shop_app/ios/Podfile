@@ -83,6 +83,8 @@ target 'rn_project_shop_app' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
   target 'rn_project_shop_appTests' do
     inherit! :complete
     # Pods for testing

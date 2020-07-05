@@ -9,11 +9,11 @@ import { Base } from "../../constants/Colors";
 import { useDispatch } from "react-redux";
 import * as authActions from "../../store/actions/auth";
 import { ActionType } from "../../store/reducers/types";
-import { StackNavigationProp } from "react-navigation-stack/lib/typescript/src/vendor/types";
-import { KEYS } from "../../navigation/NavigationKeys";
+
+import { StackNavigationProp } from "@react-navigation/stack";
 
 interface AuthScreenProps {
-  navigation: StackNavigationProp;
+  nav: StackNavigationProp;
 }
 
 type InputValidities = { [name: string]: boolean };
@@ -50,7 +50,7 @@ const formReducer = (state: FormReducerState, action: ActionType): FormReducerSt
   return state;
 };
 
-const AuthScreen = (props: AuthScreenProps) => {
+const AuthScreen = (_props: AuthScreenProps) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | string>(null);
@@ -84,7 +84,7 @@ const AuthScreen = (props: AuthScreenProps) => {
     setIsLoading(true);
     try {
       await dispatch(action);
-      props.navigation.navigate(KEYS.Shop);
+      // props.navigation.navigate(KEYS.Shop);
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
@@ -153,7 +153,7 @@ const AuthScreen = (props: AuthScreenProps) => {
   );
 };
 
-AuthScreen.navigationOptions = {
+export const screenOptions = {
   headerTitle: "Authenticate",
 };
 

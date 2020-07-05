@@ -18,4 +18,5 @@ export type OrdersState = { orders: Array<Order> };
 export type AuthState = {
   token: null | string;
   userId: null | string;
+  didTryAutoLogin: boolean;
 };

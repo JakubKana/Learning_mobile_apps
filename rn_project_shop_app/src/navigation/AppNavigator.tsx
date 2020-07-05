@@ -1,20 +1,18 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 
-import { ProductsNavigator } from "./ShopNavigator";
+import { ShopNavigator, AuthNavigator } from "./ShopNavigator";
+import { StartupScreen } from "../screens/StartUpScreen";
 import { RootState } from "../screens/shop/types";
 import { useSelector } from "react-redux";
-import { KEYS } from "./NavigationKeys";
-import { ProductsOverviewScreen } from "../screens/shop";
 
 interface NavigationContainerProps {}
 
 // This is component
-const StackNav = createStackNavigator();
 
 const AppNavigator = (_props: NavigationContainerProps) => {
   const isAuth = useSelector((state: RootState) => !!state.auth.token);
+  const didTryAutoLogin = useSelector((state: RootState) => state.auth.didTryAutoLogin);
   // const navRef = useRef<any>();
 
   // useEffect(() => {
@@ -25,7 +23,9 @@ const AppNavigator = (_props: NavigationContainerProps) => {
 
   return (
     <NavigationContainer>
-      <ProductsNavigator />
+      {isAuth && <ShopNavigator />}
+      {!isAuth && didTryAutoLogin && <AuthNavigator />}
+      {!isAuth && !didTryAutoLogin && <StartupScreen />}
     </NavigationContainer>
   );
 };

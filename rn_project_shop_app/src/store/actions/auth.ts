@@ -5,13 +5,19 @@ import { Dispatch } from "redux";
 // export const LOGIN = "LOGIN";
 export const AUTHENTICATE = "AUTHENTICATE";
 export const LOGOUT = "LOGOUT";
+export const SET_DID_TRY_AL = "SET_DID_TRY_AL";
 export const USERDATA_KEY = "USERDATA_KEY";
+
 let timer: any;
 
 export type UserData = {
   token: string;
   userId: string;
   expirationDate: string;
+};
+
+export const setDidTryAL = () => {
+  return { type: SET_DID_TRY_AL };
 };
 
 export const authenticate = (userId: string, token: string, expirationTime: number) => {

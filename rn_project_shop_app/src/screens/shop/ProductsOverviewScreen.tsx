@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { FlatList, Platform, Button, ActivityIndicator, View, StyleSheet, Text } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { ProductItem } from "../../components/shop/ProductItem";
-import { NavigationStackProp } from "react-navigation-stack";
 import { KEYS } from "../../navigation/NavigationKeys";
 import { RootState } from "./types";
 import * as cartActions from "../../store/actions/cart";
@@ -11,9 +10,13 @@ import { Base } from "../../constants/Colors";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { CustomHeaderButton } from "../../components/UI/HeaderButton";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+
+type ProductsScreenNavigationProp = StackNavigationProp;
 
 interface ProductsOverviewScreenProps {
-  navigation: NavigationStackProp;
+  navigation: ProductsScreenNavigationProp;
 }
 
 const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
@@ -36,11 +39,11 @@ const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
   }, [dispatch, setError, setIsRefreshing]);
 
   useEffect(() => {
-    const willFocusSub = props.navigation.addListener("willFocus", () => {
+    const unsubscribe = props.navigation.addListener("focus", () => {
       loadProducts();
       // clean up function
       return () => {
-        willFocusSub.remove();
+        unsubscribe();
       };
     });
   }, [loadProducts, props.navigation]);
@@ -118,7 +121,7 @@ const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
   );
 };
 
-export const screenOptions = (navData: { navigation: any }) => {
+export const screenOptions = (navData: { navigation: DrawerNavigationProp }) => {
   return {
     headerTitle: "All Products",
     headerLeft: () => (
