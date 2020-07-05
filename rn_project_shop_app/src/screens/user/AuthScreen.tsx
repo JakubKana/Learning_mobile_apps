@@ -11,9 +11,12 @@ import * as authActions from "../../store/actions/auth";
 import { ActionType } from "../../store/reducers/types";
 
 import { StackNavigationProp } from "@react-navigation/stack";
+import { AuthNavigatorStackParamList } from "../shop/types";
+
+type AuthStackNavigationProp = StackNavigationProp<AuthNavigatorStackParamList, "Auth">;
 
 interface AuthScreenProps {
-  nav: StackNavigationProp;
+  nav: AuthStackNavigationProp;
 }
 
 type InputValidities = { [name: string]: boolean };

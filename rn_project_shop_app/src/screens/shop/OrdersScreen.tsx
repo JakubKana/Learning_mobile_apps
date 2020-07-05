@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { FlatList, View, StyleSheet, Text, Platform, ActivityIndicator } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "./types";
+import { RootState, OrdersNavigatorStackParamList } from "./types";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { CustomHeaderButton } from "../../components/UI/HeaderButton";
 import { OrderItem } from "../../components/shop/OrderItem";
 import * as orderActions from "../../store/actions/orders";
 import { Base } from "../../constants/Colors";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+
+type OrdersDrawerNavigationProp = DrawerNavigationProp<OrdersNavigatorStackParamList, "Orders">;
 
 interface OrdersScreenProps {}
 
@@ -70,7 +73,7 @@ const OrdersScreen = (_props: OrdersScreenProps) => {
   );
 };
 
-export const screenOptions = (navData: { navigation: any }) => {
+export const screenOptions = (navData: { navigation: OrdersDrawerNavigationProp }) => {
   return {
     headerTitle: "Your orders",
     headerLeft: () => (

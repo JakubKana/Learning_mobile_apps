@@ -3,23 +3,24 @@ import { FlatList, Platform, Button, Alert, View, Text, StyleSheet } from "react
 
 import { ProductItem } from "../../components/shop/ProductItem";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../shop/types";
+import { RootState, AdminNavigatorStackParamList } from "../shop/types";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { CustomHeaderButton } from "../../components/UI/HeaderButton";
-import { NavigationDrawerProp } from "react-navigation-drawer";
 import { Base } from "../../constants/Colors";
 import { deleteProduct } from "../../store/actions/products";
-import { KEYS } from "../../navigation/NavigationKeys";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type AdminStackNavigationProp = StackNavigationProp<AdminNavigatorStackParamList, "UserProducts">;
 
 interface UserProductsScreenProps {
-  navigation: NavigationDrawerProp;
+  navigation: AdminStackNavigationProp;
 }
 
 const UserProductsScreen = (props: UserProductsScreenProps) => {
   const userProducts = useSelector((state: RootState) => state.products.userProducts);
   const dispatch = useDispatch();
   const editProductHandler = (id: string) => {
-    props.navigation.navigate(KEYS.EditProduct, { productId: id });
+    props.navigation.navigate("EditProduct", { productId: id });
   };
   const deleteHandler = (id: string) => {
     Alert.alert("Are you sure?", "Do you really want to delete this item?", [
@@ -89,7 +90,7 @@ export const screenOptions = (navData: { navigation: any }) => {
           title="Add"
           iconName={Platform.OS === "android" ? "md-create" : "ios-create"}
           onPress={() => {
-            navData.navigation.navigate(KEYS.EditProduct);
+            navData.navigation.navigate("EditProduct");
           }}
         />
       </HeaderButtons>

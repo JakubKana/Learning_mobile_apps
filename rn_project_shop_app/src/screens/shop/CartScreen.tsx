@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { View, Text, FlatList, Button, StyleSheet, ListRenderItemInfo, ActivityIndicator } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "./types";
+import { RootState, ProductsNavigatorStackParamList } from "./types";
 import { Base } from "../../constants/Colors";
 import { CartItem } from "../../components/shop/CartItem";
 import * as cartActions from "../../store/actions/cart";
 import * as orderActions from "../../store/actions/orders";
 import { Card } from "../../components/UI/Card";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-interface CartScreenProps {}
+type CartScreenNavigationProp = StackNavigationProp<ProductsNavigatorStackParamList, "ProductDetail">;
+
+interface CartScreenProps {
+  navigation: CartScreenNavigationProp;
+}
 
 export type CartItem = {
   productId: string;

@@ -2,8 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { FlatList, Platform, Button, ActivityIndicator, View, StyleSheet, Text } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { ProductItem } from "../../components/shop/ProductItem";
-import { KEYS } from "../../navigation/NavigationKeys";
-import { RootState } from "./types";
+import { RootState, ProductsNavigatorStackParamList } from "./types";
 import * as cartActions from "../../store/actions/cart";
 import * as productsActions from "../../store/actions/products";
 import { Base } from "../../constants/Colors";
@@ -12,11 +11,17 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { CustomHeaderButton } from "../../components/UI/HeaderButton";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { RouteProp } from "@react-navigation/native";
 
-type ProductsScreenNavigationProp = StackNavigationProp;
+type ProductsOverviewScreenNavigationProp = StackNavigationProp<ProductsNavigatorStackParamList, "ProductsOverview">;
+
+type ProductsOverviewDrawerNavigationProp = DrawerNavigationProp<ProductsNavigatorStackParamList, "ProductsOverview">;
+
+type ProductsOverviewScreenRouteProp = RouteProp<ProductsNavigatorStackParamList, "ProductsOverview">;
 
 interface ProductsOverviewScreenProps {
-  navigation: ProductsScreenNavigationProp;
+  navigation: ProductsOverviewScreenNavigationProp;
+  route: ProductsOverviewScreenRouteProp;
 }
 
 const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
@@ -56,10 +61,7 @@ const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
   }, [dispatch, loadProducts]);
 
   const selectItemHandler = (id: string, title: string) => {
-    props.navigation.navigate({
-      routeName: KEYS.ProductDetail,
-      params: { productId: id, productTitle: title },
-    });
+    props.navigation.navigate("ProductDetail", { productId: id, productTitle: title });
   };
 
   if (error) {
@@ -121,7 +123,7 @@ const ProductsOverviewScreen = (props: ProductsOverviewScreenProps) => {
   );
 };
 
-export const screenOptions = (navData: { navigation: DrawerNavigationProp }) => {
+export const screenOptions = (navData: { navigation: ProductsOverviewDrawerNavigationProp }) => {
   return {
     headerTitle: "All Products",
     headerLeft: () => (
@@ -141,7 +143,7 @@ export const screenOptions = (navData: { navigation: DrawerNavigationProp }) => 
           title="Cart"
           iconName={Platform.OS === "android" ? "md-cart" : "ios-cart"}
           onPress={() => {
-            navData.navigation.navigate(KEYS.Cart);
+            navData.navigation.navigate("Cart");
           }}
         />
       </HeaderButtons>

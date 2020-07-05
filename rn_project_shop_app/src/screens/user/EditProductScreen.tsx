@@ -4,15 +4,21 @@ import { View, ScrollView, StyleSheet, Platform, Alert, KeyboardAvoidingView, Ac
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { CustomHeaderButton } from "../../components/UI/HeaderButton";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../shop/types";
+import { RootState, AdminNavigatorStackParamList } from "../shop/types";
 import * as productsActions from "../../store/actions/products";
 import { ActionType } from "../../store/reducers/types";
 import { Input } from "../../components/UI/Input";
 import { Base } from "../../constants/Colors";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+
+type AdminStackNavigationProp = StackNavigationProp<AdminNavigatorStackParamList, "EditProduct">;
+
+type AdminScreenRouteProp = RouteProp<AdminNavigatorStackParamList, "EditProduct">;
 
 interface EditProductScreenProps {
-  navigation: StackNavigationProp;
+  navigation: AdminStackNavigationProp;
+  route: AdminScreenRouteProp;
 }
 
 type InputValidities = { [name: string]: boolean };
@@ -53,7 +59,7 @@ const EditProductScreen = (props: EditProductScreenProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | string>("");
 
-  const prodId = props.navigation.route.params ? props.navigation.route.params.productId : null;
+  const prodId = props.route.params ? props.route.params.productId : null;
   const editedProduct = useSelector((state: RootState) => state.products.userProducts.find(prod => prod.id === prodId));
   const dispatch = useDispatch();
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -89,7 +95,7 @@ const EditProductScreen = (props: EditProductScreenProps) => {
     setIsLoading(true);
     try {
       if (editedProduct) {
-        await dispatch(productsActions.updateProduct(prodId, title, description, imageUrl));
+        await dispatch(productsActions.updateProduct(prodId ?? "", title, description, imageUrl));
       } else {
         await dispatch(productsActions.createProduct(title, description, imageUrl, +price));
       }
@@ -196,8 +202,8 @@ const EditProductScreen = (props: EditProductScreenProps) => {
   );
 };
 
-export const screenOptions = (navData: { navigation: StackNavigationProp }) => {
-  const routeParams = navData.navigation.route.params ? navData.navigation.route.params : {};
+export const screenOptions = (navData: { route: any }) => {
+  const routeParams: { productId?: string } = navData.route.params ? navData.route.params : {};
   return {
     headerTitle: routeParams.productId ? "Edit Product" : "Add Product",
   };

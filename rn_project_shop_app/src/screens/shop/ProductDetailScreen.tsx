@@ -1,23 +1,22 @@
 import React from "react";
 import { View, Text, StyleSheet, Button, ScrollView, Image, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "./types";
+import { RootState, ProductsNavigatorStackParamList } from "./types";
 import { Base } from "../../constants/Colors";
 import * as cartActions from "../../store/actions/cart";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
 
-type RootStackParamList = {
-  ProductDetail: { productId: string; productTitle: string };
-};
-
-type ProductDetailScreenNavigationProp = StackNavigationProp<{ ProductDetail: { productId: string } }, "ProductDetail">;
+type ProductDetailScreenNavigationProp = StackNavigationProp<ProductsNavigatorStackParamList, "ProductDetail">;
+type ProductDetailScreenRouteProp = RouteProp<ProductsNavigatorStackParamList, "ProductDetail">;
 
 interface ProductDetailScreenProps {
   navigation: ProductDetailScreenNavigationProp;
+  route: ProductDetailScreenRouteProp;
 }
 
 const ProductDetailScreen = (props: ProductDetailScreenProps) => {
-  const productId = props.navigation.route.params.productId;
+  const productId = props.route.params?.productId;
   const selectedProduct = useSelector((state: RootState) => state.products.availableProducts).find(
     prod => prod.id === productId,
   );
@@ -45,9 +44,9 @@ const ProductDetailScreen = (props: ProductDetailScreenProps) => {
   );
 };
 
-export const screenOptions = (navData: { navigation: StackNavigationProp }) => {
+export const screenOptions = (navData: { route: ProductDetailScreenRouteProp }) => {
   return {
-    headerTitle: navData.navigation.route.params.productTitle,
+    headerTitle: navData.route.params?.productTitle,
   };
 };
 

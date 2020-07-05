@@ -2,8 +2,27 @@ import { ProductState, CartState, OrdersState, AuthState } from "../../store/red
 
 export type RootState = { products: ProductState; cart: CartState; orders: OrdersState; auth: AuthState };
 
-export type RootStackParamList = {
-  Shop: undefined;
+export type ProductsNavigatorStackParamList = {
+  ProductDetail: { productId: string; productTitle: string };
+  ProductsOverview: undefined;
+  Cart: undefined;
+};
+
+export type OrdersNavigatorStackParamList = {
+  Orders: undefined;
+};
+
+export type AdminNavigatorStackParamList = {
+  UserProducts: undefined;
+  EditProduct: { productId: string };
+};
+
+export type AuthNavigatorStackParamList = {
   Auth: undefined;
-  Startup: undefined;
+};
+
+export type ShopNavigatorDrawerParamList = {
+  Products: undefined;
+  Orders: undefined;
+  Admin: undefined;
 };
