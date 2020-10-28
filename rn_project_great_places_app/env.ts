@@ -1,5 +1,5 @@
 const vars = {
-  googleApiKey: "AIzaSyCa9sxo_LNRwn8cwFUE7Kz27A3u0SImtjU",
+  googleApiKey: "INSERT KEY HERE",
 };
 
 export { vars as ENV };
