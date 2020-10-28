@@ -19,7 +19,7 @@
       android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCa9sxo_LNRwn8cwFUE7Kz27A3u0SImtjU"/>
+            android:value="INSERT KEY HERE"/>
         <!-- Add this SplashActivity -->
         <activity
             android:name=".SplashActivity"
