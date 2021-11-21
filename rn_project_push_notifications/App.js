@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Button, View } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
@@ -14,6 +14,8 @@ Notifications.setNotificationHandler({
 });
 
 export default function App() {
+  const [pushToken, setPushToken] = useState("");
+
   useEffect(() => {
     Permissions.getAsync(Permissions.NOTIFICATIONS)
       .then((statusObj) => {
@@ -24,8 +26,20 @@ export default function App() {
       })
       .then((statusObj) => {
         if (statusObj.status !== "granted") {
-          return;
+          throw new Error("Permission not granted!");
         }
+      })
+      .then(() => {
+        return Notifications.getExpoPushTokenAsync();
+      })
+      .then((response) => {
+        console.log("response", response);
+        const token = response.data;
+        setPushToken(token);
+      })
+      .catch((err) => {
+        console.log(err);
+        return null;
       });
   }, []);
 
@@ -35,27 +49,31 @@ export default function App() {
         console.log("Response", response);
       });
 
-    const feSubscription = Notifications.addNotificationReceivedListener(
+    const fgSubscription = Notifications.addNotificationReceivedListener(
       (notification) => {
         console.log("Object", notification);
       }
     );
     return () => {
-      feSubscription.remove();
-      beSubscription.remove();
+      fgSubscription.remove();
+      bgSubscription.remove();
     };
   }, []);
 
   const triggerNotificationHandler = () => {
-    Notifications.scheduleNotificationAsync({
-      content: {
-        title: "My first local notification",
-        body: "This is the first local notification we are sending!",
-        data: { datas: { test: "data" } },
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "gzip, deflate",
+        "Content-Type": "application/json",
       },
-      trigger: {
-        seconds: 5,
-      },
+      body: JSON.stringify({
+        to: pushToken,
+        data: { extraData: "Some Data" },
+        title: "Send via the app",
+        body: "This push notification was sent via the app!",
+      }),
     });
   };
 
