@@ -1,5 +1,6 @@
 import { Dispatch } from "redux";
 import { Product } from "../../models/product";
+import { check, checkNotifications, PERMISSIONS, requestNotifications, RESULTS } from "react-native-permissions";
 
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
@@ -71,6 +72,21 @@ export function deleteProduct(productId: string) {
 
 export const createProduct = (title: string, description: string, imageUrl: string, price: number) => {
   return async (dispatch: Dispatch, getState: any) => {
+    let statusPremission;
+    let updatedStatusPermission;
+    let pushToken;
+    try {
+      statusPremission = await requestNotifications(["alert"]);
+      console.log(statusPremission);
+      if (statusPremission.status !== RESULTS.GRANTED) {
+        pushToken = null;
+      } else {
+        pushToken = "";
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+    console.log("PushToken", pushToken);
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     // add async code you want!

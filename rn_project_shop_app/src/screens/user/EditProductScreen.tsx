@@ -105,7 +105,7 @@ const EditProductScreen = (props: EditProductScreenProps) => {
     }
 
     setIsLoading(false);
-  }, [dispatch, prodId, formState]);
+  }, [formState.formIsValid, formState.inputValues, editedProduct, props.navigation, dispatch, prodId]);
 
   useEffect(() => {
     props.navigation.setOptions({
