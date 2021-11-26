@@ -1,7 +1,4 @@
 {
-  "name": "rn_project_shop_app",
-  "displayName": "rn_project_shop_app",
-  "android": {
-    "useNextNotificationsApi": true
-  }
+  "name": "shopApp",
+  "displayName": "shopApp"
 }
