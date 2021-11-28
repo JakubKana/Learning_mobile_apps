@@ -5,14 +5,24 @@ class Product {
   private _imageUrl: string;
   private _description: string;
   private _price: number;
+  private _ownerPushToken: string;
 
-  constructor(id: string, ownerId: string, title: string, imageUrl: string, description: string, price: number) {
+  constructor(
+    id: string,
+    ownerId: string,
+    ownerPushToken: string,
+    title: string,
+    imageUrl: string,
+    description: string,
+    price: number,
+  ) {
     this._id = id;
     this._ownerId = ownerId;
     this._title = title;
     this._imageUrl = imageUrl;
     this._description = description;
     this._price = price;
+    this._ownerPushToken = ownerPushToken;
   }
 
   public get id(): string {
@@ -37,6 +47,9 @@ class Product {
 
   public get price(): number {
     return this._price;
+  }
+  public get ownerPushToken(): string {
+    return this._ownerPushToken;
   }
 }
 

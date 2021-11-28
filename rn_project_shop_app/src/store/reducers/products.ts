@@ -35,6 +35,7 @@ export function productsReducer(state: ProductState = initState, action: Product
     const newProduct = new Product(
       action.productData.id,
       action.productData.ownerId,
+      action.productData.ownerPushToken,
       action.productData.title,
       action.productData.imageUrl,
       action.productData.description,
@@ -52,6 +53,7 @@ export function productsReducer(state: ProductState = initState, action: Product
     const updatedProduct = new Product(
       action.pid,
       state.userProducts[productIndex].ownerId,
+      state.userProducts[productIndex].ownerPushToken,
       action.productData.title,
       action.productData.imageUrl,
       action.productData.description,

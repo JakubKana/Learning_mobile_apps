@@ -59,13 +59,13 @@ export const addOrder = (cartItems: Array<CartItem>, totalAmount: number) => {
 
     const resData = await response.json();
 
-    dispatch({
-      type: ADD_ORDER,
-      orderData: {
-        items: cartItems,
-        amount: totalAmount,
-      },
-    });
+    // dispatch({
+    //   type: ADD_ORDER,
+    //   orderData: {
+    //     items: cartItems,
+    //     amount: totalAmount,
+    //   },
+    // });
 
     await dispatch({
       type: ADD_ORDER,

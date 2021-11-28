@@ -21,6 +21,7 @@ export function cartReducer(state: CartState = initState, action: CartActionType
     const addedProduct = action.product;
     const prodPrice = addedProduct.price;
     const prodTitle = addedProduct.title;
+    const pushToken = addedProduct.ownerPushToken;
 
     let updatedOrNewCartItem: CartItem;
     if (state.items[addedProduct.id]) {
@@ -29,6 +30,7 @@ export function cartReducer(state: CartState = initState, action: CartActionType
         state.items[addedProduct.id].quantity + 1,
         prodPrice,
         prodTitle,
+        pushToken,
         state.items[addedProduct.id].sum + prodPrice,
       );
       return {
@@ -37,7 +39,7 @@ export function cartReducer(state: CartState = initState, action: CartActionType
         totalAmount: state.totalAmount + prodPrice,
       };
     } else {
-      updatedOrNewCartItem = new CartItem(1, prodPrice, prodTitle, prodPrice);
+      updatedOrNewCartItem = new CartItem(1, prodPrice, prodTitle, pushToken, prodPrice);
     }
     return {
       ...state,
@@ -56,6 +58,7 @@ export function cartReducer(state: CartState = initState, action: CartActionType
         selectedCartItem.quantity - 1,
         selectedCartItem.price,
         selectedCartItem.title,
+        selectedCartItem.pushToken,
         selectedCartItem.sum - selectedCartItem.price,
       );
       updatedCartItems = { ...state.items, [action.pid]: updatedCartItem };

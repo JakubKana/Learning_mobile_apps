@@ -21,6 +21,7 @@ export type CartItem = {
   productPrice: number;
   quantity: number;
   productSum: number;
+  productPushToken: string;
 };
 
 const CartScreen = (_props: CartScreenProps) => {
@@ -36,6 +37,7 @@ const CartScreen = (_props: CartScreenProps) => {
         productPrice: state.cart.items[key].price,
         quantity: state.cart.items[key].quantity,
         productSum: state.cart.items[key].sum,
+        productPushToken: state.cart.items[key].pushToken,
       });
     }
     return cartItemsRemapped.sort((a, b) => (a.productId > b.productId ? 1 : -1));

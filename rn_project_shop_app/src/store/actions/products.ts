@@ -1,16 +1,8 @@
 import { Dispatch } from "redux";
 import { Product } from "../../models/product";
-import {
-  check,
-  checkNotifications,
-  PERMISSIONS,
-  request,
-  requestNotifications,
-  RESULTS,
-} from "react-native-permissions";
-import PushNotification from "react-native-push-notification";
+import { checkNotifications, RESULTS } from "react-native-permissions";
+
 import AsyncStorage from "@react-native-community/async-storage";
-import { setupPushNotification } from "../../notifications/init";
 
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
@@ -24,6 +16,7 @@ export type ProductData = {
   imageUrl: string;
   price: number;
   ownerId: string;
+  ownerPushToken: string;
 };
 
 export const fetchProducts = () => {
@@ -48,6 +41,7 @@ export const fetchProducts = () => {
           new Product(
             key,
             resData[key].ownerId,
+            resData[key].ownerPushToken,
             resData[key].title,
             resData[key].imageUrl,
             resData[key].description,
@@ -92,12 +86,12 @@ export const createProduct = (title: string, description: string, imageUrl: stri
     let pushToken;
     try {
       statusPremission = await checkNotifications();
-      console.log(statusPremission);
+
       if (statusPremission.status !== RESULTS.GRANTED) {
         pushToken = null;
       } else {
-        setupPushNotification(() => console.log("Notification"));
-        pushToken = null;
+        // setupPushNotification(() => console.log("Notification"));
+        pushToken = await AsyncStorage.getItem("pushToken");
         console.log("pushTOken", pushToken);
       }
     } catch (err) {
@@ -127,7 +121,6 @@ export const createProduct = (title: string, description: string, imageUrl: stri
     );
 
     const resData = await response.json();
-    console.dir(resData);
     dispatch({
       type: CREATE_PRODUCT,
       productData: {
@@ -137,6 +130,7 @@ export const createProduct = (title: string, description: string, imageUrl: stri
         imageUrl,
         price,
         ownerId: userId,
+        ownerPushToken: pushToken,
       },
     });
   };
