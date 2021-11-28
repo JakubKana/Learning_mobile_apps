@@ -28,20 +28,17 @@ export const authenticate = (userId: string, token: string, expirationTime: numb
 };
 export const signup = (email: string, password: string) => {
   return async (dispatch: Dispatch<any>) => {
-    const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAhBck_aC6oQ86chRL-1LXDnBJMnBew_aQ",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          returnSecureToken: true,
-        }),
+    const response = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=SIGNUPKEY", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        email,
+        password,
+        returnSecureToken: true,
+      }),
+    });
 
     if (!response.ok) {
       const errorResData = await response.json();
@@ -65,7 +62,7 @@ export const signup = (email: string, password: string) => {
 export const login = (email: string, password: string) => {
   return async (dispatch: Dispatch<any>) => {
     const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAhBck_aC6oQ86chRL-1LXDnBJMnBew_aQ",
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=SIGNUPKEY",
       {
         method: "POST",
         headers: {
@@ -89,10 +86,10 @@ export const login = (email: string, password: string) => {
       if (errorId === "INVALID_PASSWORD") {
         message = "This password is not valid!";
       }
+
       throw new Error(message);
     }
     const resData = await response.json();
-    console.log(resData);
 
     dispatch(authenticate(resData.localId, resData.idToken, parseInt(resData.expiresIn, 10) * 1000));
     const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn, 10) * 1000).toISOString();

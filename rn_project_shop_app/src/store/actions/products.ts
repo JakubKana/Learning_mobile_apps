@@ -10,6 +10,7 @@ import {
 } from "react-native-permissions";
 import PushNotification from "react-native-push-notification";
 import AsyncStorage from "@react-native-community/async-storage";
+import { setupPushNotification } from "../../notifications/init";
 
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
@@ -31,7 +32,9 @@ export const fetchProducts = () => {
     try {
       // add async code you want!
       // FETCH ANY KIND OF HTTP REQUEST
-      const response = await fetch("https://rn-shop-app-21030.firebaseio.com/products.json");
+      const response = await fetch(
+        "https://rn-shop-application-b15b6-default-rtdb.europe-west1.firebasedatabase.app/products.json",
+      );
 
       if (!response.ok) {
         throw new Error("Something went wrong!");
@@ -69,9 +72,12 @@ export function deleteProduct(productId: string) {
   return async (dispatch: Dispatch, getState: any) => {
     const token = getState().auth.token;
 
-    const response = await fetch(`https://rn-shop-app-21030.firebaseio.com/products/${productId}.json?auth=${token}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `https://rn-shop-application-b15b6-default-rtdb.europe-west1.firebasedatabase.app/products/${productId}.json?auth=${token}`,
+      {
+        method: "DELETE",
+      },
+    );
     if (!response.ok) {
       throw new Error("Something went wrong!");
     }
@@ -90,31 +96,35 @@ export const createProduct = (title: string, description: string, imageUrl: stri
       if (statusPremission.status !== RESULTS.GRANTED) {
         pushToken = null;
       } else {
-        pushToken = await AsyncStorage.getItem("pushToken");
+        setupPushNotification(() => console.log("Notification"));
+        pushToken = null;
         console.log("pushTOken", pushToken);
       }
     } catch (err) {
       console.warn(err);
     }
-    console.log("PushToken", pushToken);
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     // add async code you want!
+
     // FETCH ANY KIND OF HTTP REQUEST
-    const response = await fetch(`https://rn-shop-app-21030.firebaseio.com/products.json?auth=${token}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `https://rn-shop-application-b15b6-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=${token}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          imageUrl,
+          price,
+          ownerId: userId,
+          ownerPushToken: pushToken,
+        }),
       },
-      body: JSON.stringify({
-        title,
-        description,
-        imageUrl,
-        price,
-        ownerId: userId,
-        ownerPushToken: pushToken,
-      }),
-    });
+    );
 
     const resData = await response.json();
     console.dir(resData);
@@ -136,17 +146,20 @@ export const updateProduct = (id: string, title: string, description: string, im
   return async (dispatch: Dispatch, getState: any) => {
     const token = getState().auth.token;
 
-    const response = await fetch(`https://rn-shop-app-21030.firebaseio.com/products/${id}.json?auth=${token}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `https://rn-shop-application-b15b6-default-rtdb.europe-west1.firebasedatabase.app/products/${id}.json?auth=${token}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          imageUrl,
+        }),
       },
-      body: JSON.stringify({
-        title,
-        description,
-        imageUrl,
-      }),
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Something went wrong!");

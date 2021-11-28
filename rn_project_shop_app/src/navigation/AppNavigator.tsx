@@ -5,6 +5,7 @@ import { ShopNavigator, AuthNavigator } from "./ShopNavigator";
 import { StartupScreen } from "../screens/StartUpScreen";
 import { RootState } from "../screens/shop/types";
 import { useSelector } from "react-redux";
+import { PushController } from "../notifications/init";
 
 interface NavigationContainerProps {}
 
@@ -22,11 +23,14 @@ const AppNavigator = (_props: NavigationContainerProps) => {
   // }, [isAuth]);
 
   return (
-    <NavigationContainer>
-      {isAuth && <ShopNavigator />}
-      {!isAuth && didTryAutoLogin && <AuthNavigator />}
-      {!isAuth && !didTryAutoLogin && <StartupScreen />}
-    </NavigationContainer>
+    <>
+      <PushController />
+      <NavigationContainer>
+        {isAuth && <ShopNavigator />}
+        {!isAuth && didTryAutoLogin && <AuthNavigator />}
+        {!isAuth && !didTryAutoLogin && <StartupScreen />}
+      </NavigationContainer>
+    </>
   );
 };
 

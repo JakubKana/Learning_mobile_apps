@@ -9,7 +9,9 @@ export const fetchOrders = () => {
   return async (dispatch: Dispatch, getState: any) => {
     const userId = getState().auth.userId;
     try {
-      const response = await fetch(`https://rn-shop-app-21030.firebaseio.com/orders/${userId}.json`);
+      const response = await fetch(
+        `https://rn-shop-application-b15b6-default-rtdb.europe-west1.firebasedatabase.app/orders/${userId}.json`,
+      );
 
       if (!response.ok) {
         throw new Error("Something went wrong!");
@@ -36,17 +38,20 @@ export const addOrder = (cartItems: Array<CartItem>, totalAmount: number) => {
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     const date = new Date();
-    const response = await fetch(`https://rn-shop-app-21030.firebaseio.com/orders/${userId}.json?auth=${token}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `https://rn-shop-application-b15b6-default-rtdb.europe-west1.firebasedatabase.app/orders/${userId}.json?auth=${token}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cartItems,
+          totalAmount,
+          date: date.toISOString(),
+        }),
       },
-      body: JSON.stringify({
-        cartItems,
-        totalAmount,
-        date: date.toISOString(),
-      }),
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Something went wrong!");

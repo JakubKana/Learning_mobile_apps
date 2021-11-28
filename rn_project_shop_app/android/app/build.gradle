@@ -1,5 +1,5 @@
 apply plugin: "com.android.application"
-apply plugin: 'com.google.gms.google-services'
+
 import com.android.build.OutputFile
 
 /**
@@ -192,7 +192,8 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation platform('com.google.firebase:firebase-bom:29.0.0')
+    implementation project(':react-native-push-notification')
+    implementation platform('com.google.firebase:firebase-bom:28.2.1')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
@@ -231,3 +232,5 @@ apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 project.ext.vectoricons = [
         iconFontNames: [ 'FontAwesome5.ttf', 'Ionicons.ttf' ] // Name of the font files you want to copy
 ]
+
+apply plugin: 'com.google.gms.google-services'
